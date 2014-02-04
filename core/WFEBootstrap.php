@@ -10,7 +10,12 @@
             require_once("./config/config.php");
 
             /* default values */
-            $action = $_GET['action'];
+            if(isset($_GET['action'])){
+                $action = $_GET['action'];
+            }
+            else{
+                $action = $config['defaults']['action'];
+            }
 
 			/* ROUTING */
             if(isset($action))
