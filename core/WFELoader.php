@@ -19,7 +19,7 @@ class WFELoader {
             require_once($filepath);
         }
         else {
-            throw new WFEClassNotFoundException($filepath);
+            throw new WFEFileNotFoundException($filepath);
         }
         
     }

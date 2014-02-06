@@ -2,6 +2,8 @@
 
     namespace core\Model;
 
+    use \R;
+
     class WFEModel {
 
         /**
@@ -29,6 +31,25 @@
 
             $item = R::load($this->table, $id);
             R::trash($item);
+
+        }
+
+        public function select($id = null){
+
+            // no id in param
+            if($id == null){
+
+                $items = R::loadAll($this->table,array());
+                return $items;
+
+            }
+            // id in param
+            else {
+
+                $item = R::load($this->table,$id);
+                return $id;
+
+            }
 
         }
 

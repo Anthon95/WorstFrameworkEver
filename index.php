@@ -23,4 +23,4 @@ WFEAutoload::register(__NAMESPACE__);
 // Load main config
 WFELoader::load('app/config/config.php');
 
-exit(WFERequest::getRouteName());
+new WFEDb('localhost','wfe','root','');

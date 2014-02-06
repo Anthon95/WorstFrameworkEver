@@ -34,8 +34,10 @@ class WFEAutoload {
             if(file_exists($filename)){
                 require_once $filename;
             }
+            elseif(true) {
+
+            }
             else {
-                
                 throw new WFEClassNotFoundException($filename, $class);
             }
         }
