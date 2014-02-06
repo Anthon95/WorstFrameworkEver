@@ -2,7 +2,6 @@
 
 namespace core;
 
-use core\exception\WFEClassNotFoundException;
 use core\exception\WFEFileNotFoundException;
 
 /*

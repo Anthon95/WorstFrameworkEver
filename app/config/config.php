@@ -29,3 +29,10 @@ WFEConfig::add(array(
         'dbPassword' => ""
     ),
 ));
+
+/**
+ * GLOBALE
+ */
+WFEConfig::add(array(
+    'env' => 'dev', // whether dev or prod
+));

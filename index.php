@@ -26,5 +26,6 @@ WFELoader::load('app/config/config.php');
 // init request data
 $request = new WFERequest();
 
-// Routes request
+// Routes request and get response
 WFERouter::run($request);
+
