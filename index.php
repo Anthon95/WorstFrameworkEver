@@ -1,7 +1,6 @@
 <?php
 
 use core\exception\WFEException;
-use core\exception\WFESystemErrorException;
 use core\router\WFERouter;
 use core\WFEAutoload;
 use core\WFELoader;
@@ -27,5 +26,6 @@ WFELoader::load('app/config/config.php');
 // init request data
 $request = new WFERequest();
 
-// Routes request
+// Routes request and get response
 WFERouter::run($request);
+

@@ -38,7 +38,6 @@ class WFERequest {
                 break;
         }
         
-        
     }
     
     /**
