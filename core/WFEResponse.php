@@ -9,7 +9,7 @@ namespace core;
 class WFEResponse {
     
     public function send() {
-        
+        return $this;
     }
     
 }

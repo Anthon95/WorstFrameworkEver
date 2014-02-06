@@ -8,6 +8,7 @@ use core\WFEResponse;
 class Main extends WFEController {
     
     public function home() {
+        
         return new WFEResponse();
     }
 }
