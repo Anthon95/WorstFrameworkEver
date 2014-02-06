@@ -2,7 +2,8 @@
 
 use core\Autoload;
 use core\exception\WFEException;
-//use core\Request;
+use core\Request;
+use core\ORM\WFEDb;
 
 
 // include core files
@@ -16,5 +17,7 @@ set_exception_handler(function(WFEException $e) {
 
 // Register autoload
 Autoload::register(__NAMESPACE__);
+
+
 
 exit(Request::getRouteName());
