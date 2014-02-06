@@ -21,6 +21,6 @@ set_exception_handler(function(WFEException $e) {
 WFEAutoload::register(__NAMESPACE__);
 
 // Load main config
-WFELoader::load('app/config.php');
+WFELoader::load('app/config/config.php');
 
 exit(WFERequest::getRouteName());
