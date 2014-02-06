@@ -6,7 +6,7 @@
 
 namespace core\router;
 
-class Route {
+class WFERoute {
     
     private $path;
     private $controller;

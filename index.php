@@ -1,14 +1,15 @@
 <?php
 
-use core\Autoload;
+use core\WFEAutoload;
 use core\exception\WFEException;
-use core\Request;
+use core\WFELoader;
+use core\WFERequest;
 
+// Constante system
+define('ROOT', str_replace('\\', '/', __DIR__));
 
 // include core files
-require_once('core/Autoload.php');
-require_once('core/exception/WFEException.php');
-require_once('core/exception/ClassNotFoundException.php');
+require_once('core/WFEAutoload.php');
 
 // set exception handler
 set_exception_handler(function(WFEException $e) {
@@ -16,6 +17,9 @@ set_exception_handler(function(WFEException $e) {
 });
 
 // Register autoload
-Autoload::register(__NAMESPACE__);
+WFEAutoload::register(__NAMESPACE__);
 
-exit(Request::getRouteName());
+// Load main config
+WFELoader::load('app/config.php');
+
+exit(WFERequest::getRouteName());

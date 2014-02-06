@@ -2,13 +2,13 @@
 
 namespace core;
 
-use core\exception\ClassNotFoundException;
+use core\exception\WFEClassNotFoundException;
 
 /*
  * Autoload class
  */
 
-class Autoload {
+class WFEAutoload {
     
     protected static $namespaces = array();
     protected static $registered = false;
@@ -36,7 +36,7 @@ class Autoload {
             }
             else {
                 
-                throw new ClassNotFoundException($filename, $class);
+                throw new WFEClassNotFoundException($filename, $class);
             }
         }
         

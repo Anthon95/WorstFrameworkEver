@@ -5,12 +5,10 @@ namespace core\exception;
 use core\exception\WFEException;
 
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Class ClassNotFoundException
  */
 
-class ClassNotFoundException extends WFEException {
+class WFEClassNotFoundException extends WFEException {
     
     function __construct($in, $classname) {
         parent::__construct($in);

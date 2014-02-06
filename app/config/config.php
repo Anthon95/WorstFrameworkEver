@@ -1,7 +1,7 @@
 <?php
 
-use core\Config;
-use core\router\Route;
+use core\WFEConfig;
+use core\router\WFERoute;
 
 /**
  * ROUTES

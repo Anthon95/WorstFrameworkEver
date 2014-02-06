@@ -2,7 +2,7 @@
 
     namespace core;
 
-    class Config {
+    class WFEConfig {
 
         /**
          * @var \ArrayObject

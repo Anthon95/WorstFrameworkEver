@@ -6,7 +6,7 @@ namespace core;
  * Request class
  */
 
-class Request {
+class WFERequest {
     
     /**
      * Current route of the request
