@@ -6,18 +6,21 @@ use core\router\WFERoute;
 /**
  * ROUTES
  */
-Config::add(array(
+WFEConfig::add(array(
+    
+    'defaultRoutetName' => 'home',
     'routes' => array(
     
-        'home' => new Route('/', 'Main', 'home'),
-        'blog' => new Route('/blog', 'Main', 'home'),
+        'home' => new WFERoute('/', 'Main', 'home'),
+        'blog' => new WFERoute('/blog', 'Main', 'blogHome'),
     ),
+    
 ));
 
 /**
  * DATABASE
  */
-Config::add(array(
+WFEConfig::add(array(
     'db' => array(
 
         'dbHost' => "localhost",
