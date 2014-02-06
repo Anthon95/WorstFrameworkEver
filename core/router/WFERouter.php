@@ -26,7 +26,7 @@ class WFERouter {
         self::$action = $route->getAction();
 
         if (!self::controllerExists(self::$controller)) {
-            throw new WFEDefinitionException('The controller :' . self::$controller . ' does not exist');
+            throw new WFEDefinitionException('The controller : ' . self::$controller . ' does not exist');
         }
         
         $mycontroller = 'app\\controllers\\' . self::$controller;
@@ -34,7 +34,7 @@ class WFERouter {
         $controller = new $mycontroller();
 
         if (!self::actionExists($controller, self::$action)) {
-            throw new WFEDefinitionException('The action :' . self::$action . ' does not exist');
+            throw new WFEDefinitionException('The action : ' . self::$action . ' does not exist');
         }
         
         $myaction = self::$action;
