@@ -6,7 +6,7 @@ namespace core;
  * Base controller
  */
 
-class WFEController {
+abstract class WFEController {
     
     
     

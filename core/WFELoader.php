@@ -14,11 +14,11 @@ class WFELoader {
         
         $filepath = ROOT . '/' . $filename;
         
-        if(Loader::fileExists($filename)) {
+        if(WFELoader::fileExists($filename)) {
             require_once($filepath);
         }
         else {
-            throw new FileNotFoundException($filepath);
+            throw new WFEFileNotFoundException($filepath);
         }
         
     }

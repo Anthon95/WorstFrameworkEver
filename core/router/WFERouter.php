@@ -8,19 +8,20 @@
 
 namespace core\router;
 
-use core\Config;
-use core\Request;
+use core\WFEConfig;
+use core\WFERequest;
+use core\WFELoader;
 
 class WFERouter {
 
     private static $controller;
     private static $action;
 
-    static function run(Request $request) {
+    static function run(WFERequest $request) {
 
-        $routeName = $request::getRouteName();
+        $routeName = $request->getRouteName();
 
-        $route = Config::get('routes::' . $routeName);
+        $route = WFEConfig::get('routes::' . $routeName);
 
         self::$controller = $route->getController();
         self::$action = $route->getAction();
@@ -29,7 +30,7 @@ class WFERouter {
             throw new DefinitionException('The controller :' . self::$controller . ' does not exist');
         }
         
-        $controller = new Controller();
+        //$controller = new Controller();
 
         if (!self::actionExists(self::$action)) {
             throw new DefinitionException('The action :' . self::$action . ' does not exist');
@@ -38,7 +39,7 @@ class WFERouter {
 
     private static function controllerExists($controller) {
 
-        return Loader::fileExists('app/controllers/' . $controller . '.php');
+        return WFELoader::fileExists('app/controllers/' . $controller . '.php');
     }
 
     private static function actionExists($controller, $action) {
