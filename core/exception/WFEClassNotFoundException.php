@@ -19,7 +19,7 @@ class WFEClassNotFoundException extends WFEException {
         $this->setFile( $trace[1]['file'] );
         $this->setLine( $trace[1]['line'] );
         
-        $this->setMessage('<h1>ClassNotFoundedException</h1>Class not founded : ' . $class);
+        $this->setMessage('<h1>ClassNotFoundException</h1>Class not found : ' . $class);
     }
     
 }

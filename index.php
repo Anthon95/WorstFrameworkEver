@@ -4,6 +4,7 @@ use core\WFEAutoload;
 use core\exception\WFEException;
 use core\WFELoader;
 use core\WFERequest;
+use core\ORM\WFEDb;
 
 // Constante system
 define('ROOT', str_replace('\\', '/', __DIR__));

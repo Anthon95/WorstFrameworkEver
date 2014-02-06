@@ -19,7 +19,10 @@ Config::add(array(
  */
 Config::add(array(
     'db' => array(
-    
-        
+
+        'dbHost' => "localhost",
+        'dbName' => "wfe",
+        'dbUser' => "root",
+        'dbPassword' => ""
     ),
 ));
