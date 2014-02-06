@@ -9,14 +9,14 @@
 namespace core\router;
 
 use core\Config;
-use core\Request;
+use core\WFERequest;
 
 class WFERouter {
 
     private static $controller;
     private static $action;
 
-    static function run(Request $request) {
+    static function run(WFERequest $request) {
 
         $routeName = $request::getRouteName();
 
