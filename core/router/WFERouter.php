@@ -1,14 +1,14 @@
 <?php
 
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Class Router
  */
 
 namespace core\router;
 
-use core\Config;
+use core\exception\WFEDefinitionException;
+use core\WFEConfig;
+use core\WFELoader;
 use core\WFERequest;
 
 class WFERouter {
@@ -18,35 +18,42 @@ class WFERouter {
 
     static function run(WFERequest $request) {
 
-        $routeName = $request::getRouteName();
+        $routeName = $request->getRouteName();
 
-        $route = Config::get('routes::' . $routeName);
+        $route = WFEConfig::get('routes::' . $routeName);
 
         self::$controller = $route->getController();
         self::$action = $route->getAction();
 
         if (!self::controllerExists(self::$controller)) {
-            throw new DefinitionException('The controller :' . self::$controller . ' does not exist');
+            throw new WFEDefinitionException('The controller :' . self::$controller . ' does not exist');
         }
         
-        $controller = new Controller();
+        $mycontroller = 'app\\controllers\\' . self::$controller;
+        
+        $controller = new $mycontroller();
 
-        if (!self::actionExists(self::$action)) {
-            throw new DefinitionException('The action :' . self::$action . ' does not exist');
+        if (!self::actionExists($controller, self::$action)) {
+            throw new WFEDefinitionException('The action :' . self::$action . ' does not exist');
         }
+        
+        $myaction = self::$action;
+        
+        $controller->$myaction();
     }
 
     private static function controllerExists($controller) {
 
-        return Loader::fileExists('app/controllers/' . $controller . '.php');
+        return WFELoader::fileExists('app/controllers/' . $controller . '.php');
     }
 
     private static function actionExists($controller, $action) {
 
         return method_exists($controller, $action); 
         
+        
     }
     
-    
+   
 
 }
