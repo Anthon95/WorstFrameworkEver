@@ -17,10 +17,12 @@ class WFERouter {
 
     private static $controller;
     private static $action;
+    private static $currentRoute = null;
 
     static function run(WFERequest $request) {
 
         $routeName = $request->getRouteName();
+        self::$currentRoute = $routeName;
         
         try {
             $route = WFEConfig::get('routes::' . $routeName);
@@ -56,6 +58,10 @@ class WFERouter {
         }
         
         $response->send();
+    }
+    
+    public static function getCurrentRoute() {
+        return self::$currentRoute;
     }
 
     /**

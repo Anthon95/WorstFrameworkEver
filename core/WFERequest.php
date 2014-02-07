@@ -2,7 +2,9 @@
 
 namespace core;
 
+use core\exception\WFERequestException;
 use core\exception\WFESystemErrorException;
+use core\router\WFERouter;
 
 
 /*
@@ -23,21 +25,34 @@ class WFERequest {
      */
     private $method = null;
     
-    function __construct() {
+    function __construct($method = null, $routeName = null, $forceNesting = false) {
         
-        $this->method = $_SERVER['REQUEST_METHOD'];
-        
-        switch ($this->method) {
-            case 'POST':
-                self::initPOST();
-                break;
-            case 'GET':
-                self::initGET();
-                break;
-            default:
-                break;
+        if(is_string($method)) {
+            $this->method = $method;
+        }
+        else {
+            $this->method = $_SERVER['REQUEST_METHOD'];   
         }
         
+        if(is_string($routeName)) {
+            $this->routeName = $routeName;
+        }
+        else {
+            switch ($this->method) {
+                case 'POST':
+                    self::initPOST();
+                    break;
+                case 'GET':
+                    self::initGET();
+                    break;
+                default:
+                    break;
+            }
+        }
+        
+        if( ! $forceNesting && $this->routeName == WFERouter::getCurrentRoute()) {
+            throw new WFERequestException('You cannot request a route inside the controller\'s action linked to this route (avoid infinit loop)');
+        }
     }
     
     /**
