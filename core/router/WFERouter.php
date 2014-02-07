@@ -104,5 +104,7 @@ class WFERouter {
 
         return method_exists($controller, $action); 
     }
+    
+ 
 
 }

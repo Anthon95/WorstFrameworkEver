@@ -8,19 +8,21 @@ class WFEsession {
 
         session_start();
 
-        if (!isset($_SESSION['userdata']) || !is_array($_SESSION['userdata']))
+        if (!isset($_SESSION['userdata']) || !is_array($_SESSION['userdata'])) {
             $_SESSION['userdata'] = array();
-        if (!isset($_SESSION['flashdata']) || !is_array($_SESSION['flashdata']))
+        }
+        if (!isset($_SESSION['flashdata']) || !is_array($_SESSION['flashdata'])) {
             $_SESSION['flashdata'] = array();
+        }
     }
 
     public static function end_session() {
 
-// cleans flashdata
-        foreach ($_SESSION['flashdata'] as $name => $data);
+        foreach ($_SESSION['flashdata'] as $name => $data) {
             unset($_SESSION['flashdata'][$name]);
+        }
 
-// usefull to retrieve the last page visited
+
         set_flashdata(array('last_page_uri' => get_current_uri()));
     }
 
@@ -28,11 +30,12 @@ class WFEsession {
 
         $return = array();
 
-        if (is_string($data))
+        if (is_string($data)) {
             $return = $_SESSION['flashdata'][$data];
-        else {
-            foreach ($data as $name)
+        } else {
+            foreach ($data as $name) {
                 $return[$name] = $_SESSION['flashdata'][$name];
+            }
         }
 
         return $return;
@@ -45,11 +48,12 @@ class WFEsession {
 
         $return = array();
 
-        if (is_string($data))
+        if (is_string($data)) {
             $return = $_SESSION['userdata'][$data];
-        else {
-            foreach ($data as $name)
+        } else {
+            foreach ($data as $name) {
                 $return[$name] = $_SESSION['userdata'][$name];
+            }
         }
 
         return $return;
@@ -64,8 +68,9 @@ class WFEsession {
     public static function isset_session_data($data_name, $auto_destroy = false) {
 
         $isset = isset($_SESSION[$data_name]);
-        if ($isset && $auto_destroy)
+        if ($isset && $auto_destroy) {
             unset($_SESSION[$data_name]);
+        }
         return $isset;
     }
 
@@ -79,41 +84,45 @@ class WFEsession {
 
     public static function kill_userdata($data_names = null) {
 
-// destroy all data
         if ($data_names == null) {
-            foreach ($_SESSION['userdata'] as $key => $value);
-                unset($_SESSION['userdata'][$key]);
+            foreach ($_SESSION['userdata'] as $key => $value) {
+                
+            }
+            unset($_SESSION['userdata'][$key]);
         }
-// destroy some data
+
         else {
-            foreach ($data_names as $name)
+            foreach ($data_names as $name) {
                 unset($_SESSION['userdata'][$name]);
+            }
         }
     }
 
 
     public static function set_flashdata($data) {
 
-        foreach ($data as $name => $value)
+        foreach ($data as $name => $value) {
             $_SESSION['flashdata'][$name] = $value;
+        }
     }
 
 
 
     public static function set_session_data($data) {
 
-        foreach ($data as $name => $value)
+        foreach ($data as $name => $value) {
             $_SESSION[$name] = $value;
+        }
     }
 
 
 
     function set_userdata($data) {
 
-        foreach ($data as $name => $value)
+        foreach ($data as $name => $value) {
             $_SESSION['userdata'][$name] = $value;
+        }
     }
 
 }
 
-?>

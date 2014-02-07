@@ -26,11 +26,15 @@ set_exception_handler(function(WFEException $e) {
     }
 });
 
+
 // Register autoload
 WFEAutoload::register(__NAMESPACE__);
 
 // Load main config
 WFELoader::load('app/config/config.php');
+
+// Load smarty
+WFELoader::load('core/smarty/smarty.class.php');
 
 // set environment spec
 if(WFEConfig::get('env') == 'dev') {
