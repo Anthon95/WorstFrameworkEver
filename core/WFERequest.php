@@ -50,7 +50,7 @@ class WFERequest {
             }
         }
         
-        if( ! $forceNesting && $this->routeName == WFERouter::getCurrentRoute()) {
+        if( ! $forceNesting && ($this->routeName == WFERouter::getCurrentRoute() && $this->routeName != null)) {
             throw new WFERequestException('You cannot request a route inside the controller\'s action linked to this route (avoid infinit loop)');
         }
     }
@@ -77,7 +77,8 @@ class WFERequest {
     
     private function initGET() {
         if( ! isset($_GET['routeName']) ) {
-            $routeName = WFEConfig::get('defaultRoutetName');
+            
+            $routeName = null;
         }
         else {
             $routeName = $_GET['routeName'];

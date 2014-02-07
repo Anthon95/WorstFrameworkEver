@@ -8,14 +8,24 @@ namespace core\router;
 
 class WFERoute {
     
+    private static $instances = array();
+    
     private $path;
     private $controller;
     private $action;
+    private $name;
     
-    public function __construct($path, $controller, $action) {
+    public function __construct($name, $path, $controller, $action) {
+        $this->name = $name;
         $this->path = $path;
         $this->controller = $controller;
         $this->action = $action;
+        
+        self::$instances[] = $this;
+    }
+    
+    public function getName() {
+        return $this->name;
     }
     
     public function getPath() {
@@ -30,4 +40,12 @@ class WFERoute {
         return $this->action;
     }
     
+    public static function get($name) {
+        foreach (self::$instances as $route) {
+            if($route->getName() == $name) {
+                return $route;
+            }
+        }
+        return null;
+    }
 }

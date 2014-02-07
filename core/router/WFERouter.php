@@ -20,14 +20,18 @@ class WFERouter {
     private static $currentRoute = null;
 
     public static function run(WFERequest $request) {
-
+        
         $routeName = $request->getRouteName();
         self::$currentRoute = $routeName;
         
-        try {
-            $route = WFEConfig::get('routes::' . $routeName);
-        } catch (WFEConfigErrorException $e) {
-            $route = WFEConfig::get('routes::WFE404');
+        if($routeName == null) {
+            $route = WFERoute::get('WFE404');
+        }else {
+            try {
+                $route = WFERoute::get('routes::' . $routeName);
+            } catch (WFEConfigErrorException $e) {
+                $route = WFERoute::get('WFE404');
+            }
         }
 
         self::$controllers[] = $route->getController();
@@ -86,7 +90,7 @@ class WFERouter {
     }
     
     public static function getRouteName($path) {
-        
+        $rn = null;
     }
     
     public static function getURI(WFERequest $request = null) {

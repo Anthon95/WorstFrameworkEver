@@ -10,20 +10,23 @@ WFEConfig::add(array(
     */
     
     'defaultRoutetName' => 'home',
+    '404ErrorRouteName' => 'WFE404',
+    'ServerErrorRouteName' => 'WFEErrorServer',
+    
     'routes' => array(
         
         // system routes
-        'WFE404' => new WFERoute('', 'WFE/WFEError', 'WFE404'),
-        'WFEErrorServer' => new WFERoute('', 'WFE/WFEError', 'WFEErrorServer'),
-        'WFEPublicCss' => new WFERoute('/public/css/{css}', 'WFE/WFEPublic', 'css'),
-        'WFEPublicJs' => new WFERoute('/public/js/{js}', 'WFE/WFEPublic', 'js'),
-        'WFEPublicImg' => new WFERoute('/public/img/{img}', 'WFE/WFEPublic', 'img'),
+        new WFERoute('WFE404', '', 'WFE/WFEError', 'WFE404'),
+        new WFERoute('WFEErrorServer', '', 'WFE/WFEError', 'WFEErrorServer'),
+        new WFERoute('WFEPublicCss', '/public/css/{css}', 'WFE/WFEPublic', 'css'),
+        new WFERoute('WFEPublicJs', '/public/js/{js}', 'WFE/WFEPublic', 'js'),
+        new WFERoute('WFEPublicImg', '/public/img/{img}', 'WFE/WFEPublic', 'img'),
         
         // application routes
-        'home' => new WFERoute('/', 'Main', 'home'),
-        'user_get' => new WFERoute('/user/{id}', 'User', 'get'),
+        new WFERoute('home', '/', 'Main', 'home'),
+        new WFERoute('user_get', '/user/{id}', 'User', 'get'),
         
-        'do' => new WFERoute('/something', 'Main', 'doSomething'),
+        new WFERoute('do', '/something', 'Main', 'doSomething'),
     ),
     
     /**
