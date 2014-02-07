@@ -4,6 +4,7 @@ namespace core;
 
 use core\exception\WFERequestException;
 use core\exception\WFESystemErrorException;
+use core\router\WFERoute;
 use core\router\WFERouter;
 
 
@@ -17,7 +18,7 @@ class WFERequest {
      * Current route of the request
      * @var String
      */
-    private $routeName = null;
+    private $route = null;
     
     /**
      * Method of the request
@@ -25,7 +26,7 @@ class WFERequest {
      */
     private $method = null;
     
-    function __construct($method = null, $routeName = null, $forceNesting = false) {WFERouter::getURI();
+    function __construct($method = null, $routeName = null, $forceNesting = false) {
         
         if(is_string($method)) {
             $this->method = $method;
@@ -35,7 +36,7 @@ class WFERequest {
         }
         
         if(is_string($routeName)) {
-            $this->routeName = $routeName;
+            $this->route = WFERoute::get($routeName);
         }
         else {
             switch ($this->method) {
@@ -50,7 +51,7 @@ class WFERequest {
             }
         }
         
-        if( ! $forceNesting && ($this->routeName == WFERouter::getCurrentRoute() && $this->routeName != null)) {
+        if( ! $forceNesting && $this->route->getName() == WFERouter::getCurrentRoute() && ! $this->route != null) {
             throw new WFERequestException('You cannot request a route inside the controller\'s action linked to this route (avoid infinit loop)');
         }
     }
@@ -59,12 +60,38 @@ class WFERequest {
      * Return route of the request
      * @return String
      */
-    public function getRouteName() {
-        return $this->routeName;
+    public function getRoute() {
+        return $this->route;
     }
     
     public function getMethod() {
         return $this->method;
+    }
+    
+    public static function isAjax() {
+        return !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+    }
+    
+    public static function getURI() {
+        return str_replace('/'.RELATIVE_ROOT, '', $_SERVER['REQUEST_URI']);
+    }
+    
+    public function getArguments() {
+        $uri = $this->getURI();
+        $args = array();
+        
+        $pattern_segs = explode('/', $this->route->getPath());
+        $path_segs = explode('/', $uri);
+        
+        for($i = 0 ; $i < sizeof($path_segs) ; $i++) {
+            
+            if(substr($pattern_segs[$i], 0, 1) == '{') {
+                
+                $args[] = $path_segs[$i];
+            }
+        }
+        
+        return $args;
     }
     
     
@@ -78,15 +105,14 @@ class WFERequest {
     private function initGET() {
         if( ! isset($_GET['routeName']) ) {
             
-            $routeName = null;
+            $route = WFERoute::getByPath( $this->getURI() );
+            
         }
         else {
-            $routeName = $_GET['routeName'];
+            $route = WFERoute::get( $_GET['routeName'] );
         }
-        $this->routeName = $routeName;
+        $this->route = $route;
     }
     
-    public static function isAjax() {
-        return !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
-    }
+    
 }

@@ -48,4 +48,28 @@ class WFERoute {
         }
         return null;
     }
+    
+    public static function getByPath($path) {
+        foreach (self::$instances as $route) {
+            if(self::pathMatch($path, $route->getPath())) {
+                return $route;
+            }
+        }
+        return null;
+    }
+    
+    private static function pathMatch($path, $pattern) {
+        $pattern_segs = explode('/', $pattern);
+        $path_segs = explode('/', $path);
+        
+        for($i = 0 ; $i < sizeof($path_segs) ; $i++) {
+            
+            if(substr($pattern_segs[$i], 0, 1) != '{' && $pattern_segs[$i] != $path_segs[$i]) {
+                
+                return false;
+            }
+        }
+        
+        return true;
+    }
 }

@@ -21,19 +21,13 @@ class WFERouter {
 
     public static function run(WFERequest $request) {
         
-        $routeName = $request->getRouteName();
-        self::$currentRoute = $routeName;
+        $route = $request->getRoute();
+        self::$currentRoute = $route;
         
-        if($routeName == null) {
+        if($route == null) {
             $route = WFERoute::get('WFE404');
-        }else {
-            try {
-                $route = WFERoute::get('routes::' . $routeName);
-            } catch (WFEConfigErrorException $e) {
-                $route = WFERoute::get('WFE404');
-            }
         }
-
+        
         self::$controllers[] = $route->getController();
         self::$actions[] = $route->getAction();
 
@@ -55,7 +49,7 @@ class WFERouter {
             throw new WFEDefinitionException('The action : ' . $myaction . ' does not exist');
         }
         
-        $response = $controller->$myaction();
+        $response = \call_user_func_array(array($controller, $myaction), $request->getArguments());
         
         if( get_class($response) != 'core\WFEResponse' && ! is_subclass_of($response, 'core\WFEResponse') ) {
             throw new WFEDefinitionException('Action : ' . $myaction . ' in controller : ' . $mycontroller . ' must return a core\WFEResponse object');
@@ -89,19 +83,6 @@ class WFERouter {
         return self::$currentRoute;
     }
     
-    public static function getRouteName($path) {
-        $rn = null;
-    }
-    
-    public static function getURI(WFERequest $request = null) {
-        if($request == null) {
-            return str_replace('/'.RELATIVE_ROOT, '', $_SERVER['REQUEST_URI']);
-        }
-        else {
-            $route = WFEConfig::get('routes::' . $request->getRouteName());
-            return $route->getPath();
-        }
-    }
     
     /**
      * Return true if controller exists in app/controllers 
