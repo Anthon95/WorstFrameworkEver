@@ -34,7 +34,7 @@ WFEAutoload::register(__NAMESPACE__);
 WFELoader::load('app/config/config.php');
 
 // Load smarty
-WFELoader::load('core/smarty/smarty.class.php');
+WFELoader::load('core/libs/smarty/Smarty.class.php');
 
 // set environment spec
 if(WFEConfig::get('env') == 'dev') {
