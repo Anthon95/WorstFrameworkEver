@@ -2,10 +2,13 @@
 
 namespace core;
 
+use ArrayObject;
+use core\exception\WFEConfigErrorException;
+
 class WFEConfig {
 
     /**
-     * @var \ArrayObject
+     * @var ArrayObject
      */
     private static $config = array();
 
@@ -20,7 +23,7 @@ class WFEConfig {
 
                 $config = $config[$seg];
             } else {
-                /* throw new exception */
+                throw new WFEConfigErrorException('Setting : ' . $setting . ' does not exists');
             }
         }
 

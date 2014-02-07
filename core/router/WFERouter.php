@@ -6,6 +6,7 @@
 
 namespace core\router;
 
+use core\exception\WFEConfigErrorException;
 use core\exception\WFEDefinitionException;
 use core\WFEConfig;
 use core\WFEController;
@@ -20,8 +21,12 @@ class WFERouter {
     static function run(WFERequest $request) {
 
         $routeName = $request->getRouteName();
-
-        $route = WFEConfig::get('routes::' . $routeName);
+        
+        try {
+            $route = WFEConfig::get('routes::' . $routeName);
+        } catch (WFEConfigErrorException $e) {
+            $route = WFEConfig::get('routes::WFE404');
+        }
 
         self::$controller = $route->getController();
         self::$action = $route->getAction();
@@ -30,9 +35,13 @@ class WFERouter {
             throw new WFEDefinitionException('The controller : ' . self::$controller . ' does not exist');
         }
         
-        $mycontroller = 'app\\controllers\\' . self::$controller;
+        $mycontroller = str_replace('/', '\\', 'app\\controllers\\' . self::$controller);
         
         $controller = new $mycontroller();
+        
+        if( get_class($controller) != 'core\WFEController' && ! is_subclass_of($controller, 'core\WFEController') ) {
+            throw new WFEDefinitionException('Controller : ' . self::$controller . ' must extends core\WFEController');
+        }
 
         if (!self::actionExists($controller, self::$action)) {
             throw new WFEDefinitionException('The action : ' . self::$action . ' does not exist');
@@ -42,8 +51,8 @@ class WFERouter {
         
         $response = $controller->$myaction();
         
-        if( get_class($response) != 'core\WFEResponse' && ! is_subclass_of($response, 'core\WFEResponse')) {
-            throw new WFEDefinitionException('Action : ' . self::$action . ' in controller : ' . self::$controller . ' must return a WFEResponse object');
+        if( get_class($response) != 'core\WFEResponse' && ! is_subclass_of($response, 'core\WFEResponse') ) {
+            throw new WFEDefinitionException('Action : ' . self::$action . ' in controller : ' . self::$controller . ' must return a core\WFEResponse object');
         }
         
         $response->send();

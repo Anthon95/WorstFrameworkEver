@@ -13,7 +13,7 @@ class WFEException extends Exception {
         
     }
     
-    protected function setMessage($message) {
+    public function setMessage($message) {
         $this->message = $message;
         $this->message .= '<br>in : ' . $this->file . ' at line ' . $this->line;
     }
