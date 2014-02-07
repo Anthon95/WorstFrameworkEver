@@ -23,6 +23,19 @@ class WFELoader {
         
     }
     
+    public static function content($filename) {
+        
+        $filepath = ROOT . '/' . $filename;
+        
+        if(WFELoader::fileExists($filename)) {
+            return file_get_contents($filepath);
+        }
+        else {
+            throw new WFEFileNotFoundException($filepath);
+        }
+        
+    }
+    
     public static function fileExists($filename) {
         
         return file_exists(ROOT . '/' . $filename);

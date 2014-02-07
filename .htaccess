@@ -2,7 +2,7 @@
 RewriteEngine On
 
 # Checks if the request_file is not a file
-RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-f
 
 # Redirects all to index.php if it is not a file
 RewriteRule ^(.*)$ index.php [L]

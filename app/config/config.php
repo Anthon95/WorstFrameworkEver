@@ -3,10 +3,11 @@
 use core\WFEConfig;
 use core\router\WFERoute;
 
-/**
- * ROUTES
- */
 WFEConfig::add(array(
+    
+    /**
+    * ROUTES
+    */
     
     'defaultRoutetName' => 'home',
     'routes' => array(
@@ -14,6 +15,9 @@ WFEConfig::add(array(
         // system routes
         'WFE404' => new WFERoute('', 'WFE/WFEError', 'WFE404'),
         'WFEErrorServer' => new WFERoute('', 'WFE/WFEError', 'WFEErrorServer'),
+        'WFEPublicCss' => new WFERoute('/public/css/{css}', 'WFE/WFEPublic', 'css'),
+        'WFEPublicJs' => new WFERoute('/public/js/{js}', 'WFE/WFEPublic', 'js'),
+        'WFEPublicImg' => new WFERoute('/public/img/{img}', 'WFE/WFEPublic', 'img'),
         
         // application routes
         'home' => new WFERoute('/', 'Main', 'home'),
@@ -22,12 +26,10 @@ WFEConfig::add(array(
         'do' => new WFERoute('/something', 'Main', 'doSomething'),
     ),
     
-));
-
-/**
- * DATABASE
- */
-WFEConfig::add(array(
+    /**
+    * DATABASE
+    */
+    
     'db' => array(
 
         'dbHost' => "localhost",
@@ -35,11 +37,11 @@ WFEConfig::add(array(
         'dbUser' => "root",
         'dbPassword' => ""
     ),
-));
-
-/**
- * GLOBALE
- */
-WFEConfig::add(array(
+    
+    /**
+     * ENVIRONMENT
+     */
+    
     'env' => 'dev', // whether dev or prod
+    
 ));
