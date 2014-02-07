@@ -17,7 +17,7 @@ WFEConfig::add(array(
         
         // application routes
         'home' => new WFERoute('/', 'Main', 'home'),
-        'blog' => new WFERoute('/blog', 'Main', 'blogHome'),
+        'user_get' => new WFERoute('/user/{id}', 'User', 'get'),
         
         'do' => new WFERoute('/something', 'Main', 'doSomething'),
     ),

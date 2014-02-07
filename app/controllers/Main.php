@@ -16,5 +16,17 @@ class Main extends WFEController {
     
     public function doSomething() {
         
+        $response = new WFEResponse();
+        
+//        $menu = WFETemplate->render('menu');
+//        
+//        $response->setContent('<p>Hello !</p>');
+//        $response->setFormat('text/html');
+        
+        return $response;
+    }
+    
+    public function getMenu() {
+        
     }
 }

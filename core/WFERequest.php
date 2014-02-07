@@ -25,7 +25,7 @@ class WFERequest {
      */
     private $method = null;
     
-    function __construct($method = null, $routeName = null, $forceNesting = false) {
+    function __construct($method = null, $routeName = null, $forceNesting = false) {WFERouter::getURI();
         
         if(is_string($method)) {
             $this->method = $method;

@@ -63,7 +63,21 @@ class WFERouter {
     public static function getCurrentRoute() {
         return self::$currentRoute;
     }
-
+    
+    public static function getRouteName($path) {
+        
+    }
+    
+    public static function getURI(WFERequest $request = null) {
+        if($request == null) {
+            return str_replace('/'.RELATIVE_ROOT, '', $_SERVER['REQUEST_URI']);
+        }
+        else {
+            $route = WFEConfig::get('routes::' . $request->getRouteName());
+            return $route->getPath();
+        }
+    }
+    
     /**
      * Return true if controller exists in app/controllers 
      * @param String $controller
