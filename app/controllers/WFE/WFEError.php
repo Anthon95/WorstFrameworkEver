@@ -21,4 +21,11 @@ class WFEError extends WFEController {
         return new WFEResponse();
     }
     
+    public function WFEErrorServer() {
+        
+        header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
+
+        return new WFEResponse();
+    }
+    
 }

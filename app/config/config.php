@@ -13,10 +13,13 @@ WFEConfig::add(array(
         
         // system routes
         'WFE404' => new WFERoute('', 'WFE/WFEError', 'WFE404'),
+        'WFEErrorServer' => new WFERoute('', 'WFE/WFEError', 'WFEErrorServer'),
         
         // application routes
         'home' => new WFERoute('/', 'Main', 'home'),
         'blog' => new WFERoute('/blog', 'Main', 'blogHome'),
+        
+        'do' => new WFERoute('/something', 'Main', 'doSomething'),
     ),
     
 ));

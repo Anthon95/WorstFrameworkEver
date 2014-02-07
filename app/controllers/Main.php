@@ -9,7 +9,12 @@ class Main extends WFEController {
     
     public function home() {
         
+        \core\router\WFERouter::run(new \core\WFERequest('GET', 'do'));
         
         return new WFEResponse();
+    }
+    
+    public function doSomething() {
+        
     }
 }

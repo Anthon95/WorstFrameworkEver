@@ -16,7 +16,13 @@ require_once('core/WFEAutoload.php');
 
 // set exception handler
 set_exception_handler(function(WFEException $e) {
-    exit($e->getMessage());
+    
+    if(WFEConfig::get('env') == 'dev') {
+        exit($e->getMessage());
+    }
+    elseif(WFEConfig::get('env') == 'prod') {
+        WFERouter::run(new WFERequest('GET', 'WFEErrorServer'));
+    }
 });
 
 // Register autoload
