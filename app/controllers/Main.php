@@ -2,28 +2,26 @@
 
 namespace app\controllers;
 
+use core\router\WFERouter;
 use core\WFEController;
+use core\WFERequest;
 use core\WFEResponse;
+use core\WFETemplate;
 
 class Main extends WFEController {
     
     public function home() {
         
-        \core\router\WFERouter::run(new \core\WFERequest('GET', 'do'));
+        WFERouter::run(new WFERequest('GET', 'do'));
         
         return new WFEResponse();
     }
     
-    public function doSomething() {
+    public function doSomething($arg) {
         
         $response = new WFEResponse();
         
-//        $menu = WFETemplate::render('menu');
-//        
-//        $response->s$responseetContent($menu);
-//        $response->setFormat('text/html');
-        
-        \core\WFETemplate::render();
+        $response->setContent( WFETemplate::render(array('message' => $arg)) );
         
         return $response;
     }

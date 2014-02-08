@@ -8,6 +8,7 @@ use core\WFEConfig;
 use core\WFELoader;
 use core\WFERequest;
 
+
 // Constante system
 define('ROOT', str_replace('\\', '/', __DIR__));
 define('RELATIVE_ROOT', str_replace($_SERVER['DOCUMENT_ROOT'], '', ROOT));
