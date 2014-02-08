@@ -9,8 +9,9 @@ use core\WFELoader;
 use core\WFERequest;
 
 // Constante system
+define('SERVER_ROOT', str_replace('//', '/', $_SERVER['DOCUMENT_ROOT'] . '/'));
 define('ROOT', str_replace('\\', '/', __DIR__));
-define('RELATIVE_ROOT', str_replace($_SERVER['DOCUMENT_ROOT'], '', ROOT));
+define('RELATIVE_ROOT', str_replace(SERVER_ROOT, '', ROOT));
 
 // include core files
 require_once('core/WFEAutoload.php');

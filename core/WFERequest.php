@@ -102,7 +102,9 @@ class WFERequest {
             
             if(substr($pattern_segs[$i], 0, 1) == ':') {
                 
-                $args[] = $path_segs[$i];
+                if(isset($path_segs[$i])) {
+                    $args[] = $path_segs[$i];
+                }
             }
         }
         
