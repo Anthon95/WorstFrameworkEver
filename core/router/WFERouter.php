@@ -35,7 +35,7 @@ class WFERouter {
             throw new WFEDefinitionException('The controller : ' . self::getCurrentController() . ' does not exist');
         }
         
-        $mycontroller = str_replace('/', '\\', 'app\\controllers\\' . self::getCurrentController());
+        $mycontroller = self::getControllerClass(self::getCurrentController());
         
         $controller = new $mycontroller();
         
@@ -104,7 +104,7 @@ class WFERouter {
      */
     private static function controllerExists($controller) {
 
-        return WFELoader::fileExists('app/controllers/' . $controller . '.php') && class_exists('app\\controllers\\' . self::getCurrentController());
+        return WFELoader::fileExists('app/controllers/' . $controller . '.php') && class_exists(self::getControllerClass($controller));
     }
     
     /**
@@ -118,6 +118,9 @@ class WFERouter {
         return method_exists($controller, $action); 
     }
     
+    private static function getControllerClass($controller) {
+        return 'app\\controllers\\' . str_replace('/', '\\', $controller);
+    }
  
 
 }
