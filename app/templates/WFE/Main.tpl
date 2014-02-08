@@ -2,17 +2,18 @@
 <html>
 
     <head>
-        <title>WFE test</title>
-        <meta name="description" content="Test of the Worst Framework Ever">
-        <meta name="keyword" content="worst,framework,ever">
+        <title>{block name=title}Default Page Title{/block}</title>
+        <meta charset="utf-8">
+        <meta name="description" content="{block name=description}Default Page Description{/block}">
+        <meta name="keyword" content="{block name=keywords}default,key,words{/block}">
     </head>
 
     <body>
-        {include file='header.tpl'}
-
-        {include file=$template}
-
-        {include file='footer.tpl'}
+        
+        <div id="page-content">
+            
+        </div>
+        
     </body>
 
 </html>

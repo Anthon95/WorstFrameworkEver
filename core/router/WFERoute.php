@@ -6,6 +6,8 @@
 
 namespace core\router;
 
+use core\exception\WFERouteException;
+
 class WFERoute {
 
     private static $instances = array();
@@ -59,28 +61,14 @@ class WFERoute {
     
     public function injectParams($params) {
         
-        $pattern_segs = explode('/', $this->path);
-        $url = '';
-        $i = 0;
-        
-        foreach ($pattern_segs as $seg) {
-            if(substr($seg, 0, 1) == ':') {
-                if($i >= 2) {
-                    $url .= '/' . array_shift($params);   
-                }
-                else {
-                    $url .= array_shift($params);
-                }                
-            }
+        $url = $this->getPath();
+        foreach ($params as $paramName => $param) {
+            if (strpos($url, ':' . $paramName) === false) {
+                throw new WFERouteException('Parameter : ' . $paramName . ' does not exists in route : ' . $this->name);
+            }   
             else {
-                if($i >= 2) {
-                    $url .= '/' . $seg;
-                }
-                else {
-                    $url .= $seg;
-                }
+                $url = str_replace(':' . $paramName, $param, $url);
             }
-            $i++;
         }
         
         return $url;
