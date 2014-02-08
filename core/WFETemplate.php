@@ -7,30 +7,59 @@
  */
 
 /**
- * Description of WFEtempl
+ * Description of WFETemplate
  *
  * @author SUPINTERNET
  */
 
 namespace core;
 
+use core\router\WFERouter;
+use \Smarty;
+
 class WFETemplate {
 
-    public static function render($tpl = null) {
+    private static $smarty;
+    CONST TPL_PATH = '/app/templates/';
 
-        $smarty->display('/app/templates/Main/doSomething.tpl');
+    public static function render($arg1 = null, $arg2 = array()) {
 
-        if(!file_exists($tpl)) {
-        }
-        else {
-            require_once $tpl;
+        if(self::$smarty == null){
+            self::$smarty = new Smarty();
         }
 
-        if($tpl == $myaction){
-            $smarty->display('/app/templates/'.$controller.'/'.$tpl.'.tpl');
+        if(is_array($arg1)){
+            $tpl = self::defaultTemplate();
+            self::setParams($arg1);
         }
-        else {
+        elseif(is_string($arg1)){
+            $tpl = $arg1;
+            self::setParams($arg2);
+        }
+        else{
+            $tpl = self::defaultTemplate();
+            self::setParams($arg2);
+        }
+
+        $output = self::$smarty->fetch(ROOT . self::TPL_PATH . $tpl);
+
+        return $output;
+    }
+
+    private static function setParams($params = array()){
+
+        foreach($params as $key=>$value){
+
+            self::$smarty->assign($key,$value);
+
         }
 
     }
+
+    private static function defaultTemplate(){
+
+        return WFERouter::getCurrentController().'/'.WFERouter::getCurrentAction().'.tpl';
+
+    }
+
 }
