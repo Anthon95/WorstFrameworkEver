@@ -89,7 +89,7 @@ class WFETemplate {
 
     private static function registerPluginsSmarty(){
 
-        self::$smarty -> registerPlugins("function","link",array("WFESmartyPlugins","link"));
+        self::$smarty -> registerPlugin("function","link",array("core\libs\smartyPlugins\WFESmartyPlugins","link"));
 
     }
 

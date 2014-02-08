@@ -39,7 +39,7 @@ WFELoader::load('core/libs/smarty/Smarty.class.php');
 
 // set environment spec
 if(WFEConfig::get('env') == 'dev') {
-    error_reporting(E_ERROR | E_WARNING | E_PARSE);
+    error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE | E_ALL);
 }
 elseif(WFEConfig::get('env') == 'prod') {
     error_reporting(0);

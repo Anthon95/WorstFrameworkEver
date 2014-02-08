@@ -1,6 +1,6 @@
 <?php
 
-namespace core;
+namespace core\libs\smartyPlugins;
 
 use core\router\WFERoute;
 
