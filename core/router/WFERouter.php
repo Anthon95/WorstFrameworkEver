@@ -6,9 +6,7 @@
 
 namespace core\router;
 
-use core\exception\WFEConfigErrorException;
 use core\exception\WFEDefinitionException;
-use core\WFEConfig;
 use core\WFEController;
 use core\WFELoader;
 use core\WFERequest;

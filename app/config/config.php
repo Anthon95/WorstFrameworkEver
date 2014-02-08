@@ -17,7 +17,7 @@ WFEConfig::add(array(
         
         // system routes
         new WFERoute('WFE404', null, 'WFE/WFEError', 'WFE404'),
-        new WFERoute('WFEErrorServer', null, 'WFE/WFEError', 'WFEErrorServer'),
+        new WFERoute('WFE500', null, 'WFE/WFEError', 'WFEErrorServer'),
         
         new WFERoute('WFEPublicCss', '/public/css/:css', 'WFE/WFEPublic', 'css'),
         new WFERoute('WFEPublicJs', '/public/js/:js', 'WFE/WFEPublic', 'js'),
@@ -25,9 +25,10 @@ WFEConfig::add(array(
         
         // application routes
         new WFERoute('home', '/', 'Main', 'home'),
+        new WFERoute('home_2', '/:id/home/:id2', 'Main', 'home'),
         new WFERoute('user_get', '/user/:id', 'User', 'get'),
         
-        new WFERoute('do', '/something', 'Main', 'doSomething'),
+        new WFERoute('do', '/something/:do', 'Main', 'doSomething'),
     ),
     
     /**

@@ -8,14 +8,12 @@ namespace core;
 
 class WFEResponse {
 
-    protected $content;
-    protected $format;
+    protected $content = '';
+    protected $format = 'text/html';
 
     public function __construct() {
 
-        if ($format == '.json' || '.html') {
-            
-        }
+        
     }
 
     public function send() {

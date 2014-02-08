@@ -13,7 +13,9 @@ use core\WFEResponse;
 class WFEPublic extends WFEController {
     
     public function css($css) {
+        
         $response = new WFEResponse();
+                
         $response->setContent(WFELoader::content('public/css/' . $css));
         $response->setFormat('text/css');
         
@@ -23,15 +25,18 @@ class WFEPublic extends WFEController {
     public function js($js) {
         $response = new WFEResponse();
         $response->setContent(WFELoader::content('public/js/' . $js));
-        $response->setFormat('text/css');
+        $response->setFormat('text/js');
     }
     
     public function img($img) {
+        
+        
         $response = new WFEResponse();
         $response->setContent(WFELoader::content('public/img/' . $img));
-        exit(var_dump(pathinfo($img, PATHINFO_EXTENSION)));
         
         $response->setFormat('image/' . pathinfo($img, PATHINFO_EXTENSION));
+        
+        return $response;
     }
     
 }

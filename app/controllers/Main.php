@@ -18,10 +18,12 @@ class Main extends WFEController {
         
         $response = new WFEResponse();
         
-//        $menu = WFETemplate->render('menu');
+//        $menu = WFETemplate::render('menu');
 //        
-//        $response->setContent('<p>Hello !</p>');
+//        $response->s$responseetContent($menu);
 //        $response->setFormat('text/html');
+        
+        \core\WFETemplate::render();
         
         return $response;
     }
