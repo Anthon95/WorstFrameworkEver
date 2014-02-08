@@ -29,13 +29,20 @@ class WFETemplate {
             self::$init = true;
             
             self::$smarty = new Smarty();
-            
+            if(WFEConfig::get("env") == "prod"){
+                self::$smarty->debugging = false;
+            }else {
+                self::$smarty->debugging = true;
+            }
+
             self::$smarty->setTemplateDir(array(
                 'templates' => ROOT . self::TPL_PATH,
             ));
             
             self::$smarty->setCompileDir(ROOT . '/app/cache/smarty/template_c/');
         }
+
+        self::registerPluginsSmarty();
     }
     
     public static function render($arg1 = null, $arg2 = array()) {
@@ -77,6 +84,12 @@ class WFETemplate {
     private static function defaultTemplate(){
 
         return WFERouter::getCurrentController().'/'.WFERouter::getCurrentAction().'.tpl';
+
+    }
+
+    private static function registerPluginsSmarty(){
+
+        self::$smarty -> registerPlugins("function","link",array("WFESmartyPlugins","link"));
 
     }
 
