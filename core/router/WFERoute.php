@@ -56,6 +56,35 @@ class WFERoute {
         }
         return null;
     }
+    
+    public function injectParams($params) {
+        
+        $pattern_segs = explode('/', $this->path);
+        $url = '';
+        $i = 0;
+        
+        foreach ($pattern_segs as $seg) {
+            if(substr($seg, 0, 1) == ':') {
+                if($i >= 2) {
+                    $url .= '/' . array_shift($params);   
+                }
+                else {
+                    $url .= array_shift($params);
+                }                
+            }
+            else {
+                if($i >= 2) {
+                    $url .= '/' . $seg;
+                }
+                else {
+                    $url .= $seg;
+                }
+            }
+            $i++;
+        }
+        
+        return $url;
+    }
 
     private static function pathMatch($path, $pattern) {
         $pattern_segs = explode('/', $pattern);

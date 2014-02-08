@@ -14,19 +14,33 @@
 
 namespace core;
 
+use core\exception\WFETemplateException;
 use core\router\WFERouter;
-use \Smarty;
+use Smarty;
 
 class WFETemplate {
 
     private static $smarty;
+    private static $init = false;
     CONST TPL_PATH = '/app/templates/';
 
-    public static function render($arg1 = null, $arg2 = array()) {
-
-        if(self::$smarty == null){
+    public static function init() {
+        if(!self::$init) {
+            self::$init = true;
+            
             self::$smarty = new Smarty();
+            
+            self::$smarty->setTemplateDir(array(
+                'templates' => ROOT . self::TPL_PATH,
+            ));
+            
+            self::$smarty->setCompileDir(ROOT . '/app/cache/smarty/template_c/');
         }
+    }
+    
+    public static function render($arg1 = null, $arg2 = array()) {
+        
+        self::init();
 
         if(is_array($arg1)){
             $tpl = self::defaultTemplate();
@@ -40,9 +54,13 @@ class WFETemplate {
             $tpl = self::defaultTemplate();
             self::setParams($arg2);
         }
-
-        $output = self::$smarty->fetch(ROOT . self::TPL_PATH . $tpl);
-
+        
+        if( ! WFELoader::fileExists('app/templates/' . $tpl)) {
+            throw new WFETemplateException($tpl);
+        }
+        
+        $output = self::$smarty->fetch($tpl);
+        
         return $output;
     }
 
