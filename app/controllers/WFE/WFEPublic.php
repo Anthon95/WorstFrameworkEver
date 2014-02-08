@@ -16,6 +16,8 @@ class WFEPublic extends WFEController {
         $response = new WFEResponse();
         $response->setContent(WFELoader::content('public/css/' . $css));
         $response->setFormat('text/css');
+        
+        return $response;
     }
     
     public function js($js) {

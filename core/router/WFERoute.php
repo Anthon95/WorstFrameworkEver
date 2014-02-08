@@ -51,7 +51,7 @@ class WFERoute {
     
     public static function getByPath($path) {
         foreach (self::$instances as $route) {
-            if(self::pathMatch($path, $route->getPath())) {
+            if($route->getPath() != null && self::pathMatch($path, $route->getPath())) {
                 return $route;
             }
         }
@@ -62,9 +62,9 @@ class WFERoute {
         $pattern_segs = explode('/', $pattern);
         $path_segs = explode('/', $path);
         
-        for($i = 0 ; $i < sizeof($path_segs) ; $i++) {
+        for($i = 0 ; $i < max(sizeof($path_segs), sizeof($pattern_segs)) ; $i++) {
             
-            if(substr($pattern_segs[$i], 0, 1) != '{' && $pattern_segs[$i] != $path_segs[$i]) {
+            if(isset($pattern_segs[$i]) && substr($pattern_segs[$i], 0, 1) != ':' && isset($path_segs[$i]) && $pattern_segs[$i] != $path_segs[$i]) {
                 
                 return false;
             }
