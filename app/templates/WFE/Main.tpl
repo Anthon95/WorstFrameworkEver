@@ -10,7 +10,7 @@
     <body>
         {include file='header.tpl'}
 
-        {include file=$template}
+
 
         {include file='footer.tpl'}
     </body>

@@ -46,7 +46,7 @@ class WFETemplate {
     }
     
     public static function render($arg1 = null, $arg2 = array()) {
-        
+
         self::init();
 
         if(is_array($arg1)){
@@ -61,11 +61,11 @@ class WFETemplate {
             $tpl = self::defaultTemplate();
             self::setParams($arg2);
         }
-        
+
         if( ! WFELoader::fileExists('app/templates/' . $tpl)) {
             throw new WFETemplateException($tpl);
         }
-        
+
         $output = self::$smarty->fetch($tpl);
         
         return $output;
