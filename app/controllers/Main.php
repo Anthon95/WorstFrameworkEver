@@ -12,7 +12,8 @@ class Main extends WFEController {
     
     public function home() {
         
-        WFERouter::run(new WFERequest('GET', 'do'));
+        
+        $response = WFERouter::run(new WFERequest('GET', 'do', array('BLA')));
         
         return new WFEResponse();
     }

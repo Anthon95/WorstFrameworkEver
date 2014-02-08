@@ -26,7 +26,13 @@ class WFERequest {
      */
     private $method = null;
     
-    function __construct($method = null, $routeName = null, $forceNesting = false) {
+    /**
+     * Params of the request
+     * @var Array
+     */
+    private $params = null;
+    
+    function __construct($method = null, $routeName = null, $params = null, $forceNesting = false) {
         
         if(is_string($method)) {
             $this->method = $method;
@@ -54,6 +60,10 @@ class WFERequest {
         if( ! $forceNesting && $this->route != null && $this->route->getName() == WFERouter::getCurrentRoute()) {
             throw new WFERequestException('You cannot request a route inside the controller\'s action linked to this route (avoid infinit loop)');
         }
+        
+        if(is_array($params)) {
+            $this->params = $params;
+        }
     }
     
     /**
@@ -77,6 +87,11 @@ class WFERequest {
     }
     
     public function getArguments() {
+        
+        if(is_array($this->params)) {
+            return $this->params;
+        }
+        
         $uri = $this->getURI();
         $args = array();
         

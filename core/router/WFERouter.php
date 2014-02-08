@@ -10,6 +10,7 @@ use core\exception\WFEDefinitionException;
 use core\WFEController;
 use core\WFELoader;
 use core\WFERequest;
+use core\WFEResponse;
 
 class WFERouter {
 
@@ -54,10 +55,23 @@ class WFERouter {
             throw new WFEDefinitionException('Action : ' . $myaction . ' in controller : ' . $mycontroller . ' must return a core\WFEResponse object');
         }
         
-        array_pop(self::$controllers);
-        array_pop(self::$actions);
+        if(sizeof(self::$controllers) == 1) {
+            $response->send();
+        }
+        else {
+            array_pop(self::$controllers);
+            array_pop(self::$actions);
+            
+            return $response;
+        }
+    }
+    
+    public static function redirect($routeName, $params = array()) {
         
-        $response->send();
+        $route = WFERoute::get($routeName);
+    
+        header('Location: ' . $route->injectParams($params));
+        return new WFEResponse();
     }
     
     public static function getCurrentController() {

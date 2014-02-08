@@ -14,8 +14,9 @@
 
 namespace core;
 
+use core\exception\WFETemplateException;
 use core\router\WFERouter;
-use \Smarty;
+use Smarty;
 
 class WFETemplate {
 
@@ -52,6 +53,10 @@ class WFETemplate {
         else{
             $tpl = self::defaultTemplate();
             self::setParams($arg2);
+        }
+        
+        if( ! WFELoader::fileExists('app/templates/' . $tpl)) {
+            throw new WFETemplateException($tpl);
         }
         
         $output = self::$smarty->fetch($tpl);
