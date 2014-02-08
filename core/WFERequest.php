@@ -119,9 +119,9 @@ class WFERequest {
     
     private function initGET() {
         if( ! isset($_GET['routeName']) ) {
-            
+
             $route = WFERoute::getByPath( $this->getURI() );
-            
+
         }
         else {
             $route = WFERoute::get( $_GET['routeName'] );

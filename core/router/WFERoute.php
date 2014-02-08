@@ -88,7 +88,7 @@ class WFERoute {
             return false;
         }
 
-        for ($i = 0; $i < $size; $i++) {
+        for ($i = 0; $i < $size; $i++) {echo $pattern_segs[$i] . ' :: ' . $path_segs[$i] .'<br>';
 
             if ((substr($pattern_segs[$i], 0, 1) != ':' && $pattern_segs[$i] != $path_segs[$i])) {
 
