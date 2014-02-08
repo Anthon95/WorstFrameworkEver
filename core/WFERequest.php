@@ -98,7 +98,7 @@ class WFERequest {
         $pattern_segs = explode('/', $this->route->getPath());
         $path_segs = explode('/', $uri);
         
-        for($i = 0 ; $i < sizeof($path_segs) ; $i++) {
+        for($i = 0 ; $i < sizeof($pattern_segs) ; $i++) {
             
             if(substr($pattern_segs[$i], 0, 1) == ':') {
                 
