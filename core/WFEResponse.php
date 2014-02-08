@@ -8,41 +8,40 @@ namespace core;
 
 class WFEResponse {
 
-    
     protected $content;
     protected $format;
-    
+
     public function __construct() {
-        
-        if ($format == '.json' || '.html')
-        {
+
+        if ($format == '.json' || '.html') {
             
         }
     }
-    
+
     public function send() {
 
-      
+        header('Content-type: ' . $this->getFormat());
+        exit($this->getContent());
     }
 
     public function getContent() {
 
-      return $this->content;
+        return $this->content;
     }
 
     public function setContent($content) {
-        
-        $this->setContent = $content;
+
+        $this->content = $content;
     }
 
     public function getFormat() {
 
-         return $this->format;
+        return $this->format;
     }
 
-    public function setFormat() {
-        
-         $this->setFormat = $format;
+    public function setFormat($format) {
+
+        $this->format = $format;
     }
 
 }

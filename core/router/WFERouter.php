@@ -26,6 +26,7 @@ class WFERouter {
         
         if($route == null) {
             $route = WFERoute::get('WFE404');
+            $request = new WFERequest('GET', 'WFE404');
         }
         
         self::$controllers[] = $route->getController();

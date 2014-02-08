@@ -51,7 +51,7 @@ class WFERequest {
             }
         }
         
-        if( ! $forceNesting && $this->route->getName() == WFERouter::getCurrentRoute() && ! $this->route != null) {
+        if( ! $forceNesting && $this->route != null && $this->route->getName() == WFERouter::getCurrentRoute()) {
             throw new WFERequestException('You cannot request a route inside the controller\'s action linked to this route (avoid infinit loop)');
         }
     }
@@ -85,7 +85,7 @@ class WFERequest {
         
         for($i = 0 ; $i < sizeof($path_segs) ; $i++) {
             
-            if(substr($pattern_segs[$i], 0, 1) == '{') {
+            if(substr($pattern_segs[$i], 0, 1) == ':') {
                 
                 $args[] = $path_segs[$i];
             }
