@@ -16,10 +16,21 @@ namespace core;
 
 class WFETemplate {
 
-    public static function render($tpl) {
-        
-        
+    public static function render($tpl = null) {
+
+        $smarty->display('/app/templates/Main/doSomething.tpl');
+
+        if(!file_exists($tpl)) {
+        }
+        else {
+            require_once $tpl;
+        }
+
+        if($tpl == $myaction){
+            $smarty->display('/app/templates/'.$controller.'/'.$tpl.'.tpl');
+        }
+        else {
+        }
 
     }
-
 }

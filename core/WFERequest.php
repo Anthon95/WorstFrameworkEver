@@ -50,7 +50,7 @@ class WFERequest {
                     break;
             }
         }
-        
+
         if( ! $forceNesting && $this->route->getName() == WFERouter::getCurrentRoute() && ! $this->route != null) {
             throw new WFERequestException('You cannot request a route inside the controller\'s action linked to this route (avoid infinit loop)');
         }
@@ -67,7 +67,7 @@ class WFERequest {
     public function getMethod() {
         return $this->method;
     }
-    
+
     public static function isAjax() {
         return !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
     }
