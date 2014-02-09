@@ -71,7 +71,7 @@ class WFERoute {
             }
         }
         
-        return $url;
+        return APP_PATH . $url;
     }
 
     private static function pathMatch($path, $pattern) {
