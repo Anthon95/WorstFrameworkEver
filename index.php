@@ -35,6 +35,9 @@ WFEAutoload::register(__NAMESPACE__);
 // Load main config
 WFELoader::load('app/config/config.php');
 
+// Load Database
+\core\ORM\WFEDb::connect();
+
 // Load smarty
 WFELoader::load('core/libs/smarty/Smarty.class.php');
 

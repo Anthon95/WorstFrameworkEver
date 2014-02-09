@@ -6,6 +6,8 @@ namespace core;
  * Class WFEResponse
  */
 
+use core\ORM\WFEDb;
+
 class WFEResponse {
     
     /**
@@ -25,6 +27,7 @@ class WFEResponse {
     public function send() {
 
         WFEsession::end();
+        WFEDb::disconnect();
         
         header('Content-type: ' . $this->getFormat());
         exit($this->getContent());

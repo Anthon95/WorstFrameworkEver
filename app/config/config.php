@@ -41,10 +41,11 @@ WFEConfig::add(array(
     
     'db' => array(
 
-        'dbHost' => "localhost",
-        'dbName' => "wfe",
-        'dbUser' => "root",
-        'dbPassword' => ""
+        'host' => "localhost",
+        'name' => "wfe",
+        'user' => "root",
+        'password' => "",
+        'enabled' => true
     ),
     
     /**
