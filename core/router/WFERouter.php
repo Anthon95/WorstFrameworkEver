@@ -55,6 +55,7 @@ class WFERouter {
             $request = new WFERequest('GET', 'WFEMain', array(
                 array(
                     'routeToLoad' => $route->injectParams($oldRequest->getArguments()),
+                    'WFERoutes' => WFERoute::getInstances(),
                 )
             ));    
         }
