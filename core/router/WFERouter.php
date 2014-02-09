@@ -6,12 +6,11 @@
 
 namespace core\router;
 
-use core\exception\WFEConfigErrorException;
 use core\exception\WFEDefinitionException;
-use core\WFEConfig;
 use core\WFEController;
 use core\WFELoader;
 use core\WFERequest;
+use core\WFEResponse;
 
 class WFERouter {
 
@@ -20,24 +19,23 @@ class WFERouter {
     private static $currentRoute = null;
 
     public static function run(WFERequest $request) {
-
-        $routeName = $request->getRouteName();
-        self::$currentRoute = $routeName;
         
-        try {
-            $route = WFEConfig::get('routes::' . $routeName);
-        } catch (WFEConfigErrorException $e) {
-            $route = WFEConfig::get('routes::WFE404');
+        $route = $request->getRoute();
+        self::$currentRoute = $route;
+        
+        if($route == null) {
+            $route = WFERoute::get('WFE404');
+            $request = new WFERequest('GET', 'WFE404');
         }
-
+        
         self::$controllers[] = $route->getController();
         self::$actions[] = $route->getAction();
 
-        if (!self::controllerExists(self::$controllers)) {
-            throw new WFEDefinitionException('The controller : ' . self::$controllers . ' does not exist');
+        if (!self::controllerExists(self::getCurrentController())) {
+            throw new WFEDefinitionException('The controller : ' . self::getCurrentController() . ' does not exist');
         }
         
-        $mycontroller = str_replace('/', '\\', 'app\\controllers\\' . self::getCurrentController());
+        $mycontroller = self::getControllerClass(self::getCurrentController());
         
         $controller = new $mycontroller();
         
@@ -51,16 +49,29 @@ class WFERouter {
             throw new WFEDefinitionException('The action : ' . $myaction . ' does not exist');
         }
         
-        $response = $controller->$myaction();
+        $response = \call_user_func_array(array($controller, $myaction), $request->getArguments());
         
         if( get_class($response) != 'core\WFEResponse' && ! is_subclass_of($response, 'core\WFEResponse') ) {
             throw new WFEDefinitionException('Action : ' . $myaction . ' in controller : ' . $mycontroller . ' must return a core\WFEResponse object');
         }
         
-        array_pop(self::$controllers);
-        array_pop(self::$actions);
+        if(sizeof(self::$controllers) == 1) {
+            $response->send();
+        }
+        else {
+            array_pop(self::$controllers);
+            array_pop(self::$actions);
+            
+            return $response;
+        }
+    }
+    
+    public static function redirect($routeName, $params = array()) {
         
-        $response->send();
+        $route = WFERoute::get($routeName);
+    
+        header('Location: ' . $route->injectParams($params));
+        return new WFEResponse();
     }
     
     public static function getCurrentController() {
@@ -85,19 +96,6 @@ class WFERouter {
         return self::$currentRoute;
     }
     
-    public static function getRouteName($path) {
-        
-    }
-    
-    public static function getURI(WFERequest $request = null) {
-        if($request == null) {
-            return str_replace('/'.RELATIVE_ROOT, '', $_SERVER['REQUEST_URI']);
-        }
-        else {
-            $route = WFEConfig::get('routes::' . $request->getRouteName());
-            return $route->getPath();
-        }
-    }
     
     /**
      * Return true if controller exists in app/controllers 
@@ -106,7 +104,7 @@ class WFERouter {
      */
     private static function controllerExists($controller) {
 
-        return ! WFELoader::fileExists('app/controllers/' . $controller . '.php' || ! class_exists('app\\controllers\\' . self::$controllers));
+        return WFELoader::fileExists('app/controllers/' . $controller . '.php') && class_exists(self::getControllerClass($controller));
     }
     
     /**
@@ -120,6 +118,9 @@ class WFERouter {
         return method_exists($controller, $action); 
     }
     
+    private static function getControllerClass($controller) {
+        return 'app\\controllers\\' . str_replace('/', '\\', $controller);
+    }
  
 
 }
