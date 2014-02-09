@@ -67,8 +67,6 @@ class WFETemplate {
 
         $output = self::$smarty->fetch($tpl);
 
-        $smarty->display('/app/templates/Main/doSomething.tpl');
-
         return $output;
     }
 
