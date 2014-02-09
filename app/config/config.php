@@ -9,10 +9,6 @@ WFEConfig::add(array(
     * ROUTES
     */
     
-    'defaultRoutetName' => 'home',
-    '404ErrorRouteName' => 'WFE404',
-    'ServerErrorRouteName' => 'WFEErrorServer',
-    
     'routes' => array(
         
         // system routes /////////////////////////////////////////////////////////////////////////////////
@@ -57,7 +53,7 @@ WFEConfig::add(array(
     /**
      * CONTROLLERS
      */
-    
+
     'publicController' => 'WFE/WFEPublic',
     'errorController' => 'WFE/WFEError',
     
