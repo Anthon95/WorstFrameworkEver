@@ -32,7 +32,7 @@ WFEConfig::add(array(
         new WFERoute('home_2', '/{id}/home/{id2}', 'Main', 'home'),
         new WFERoute('user_get', '/user/{id}', 'User', 'get'),
         
-        new WFERoute('do', '/something/{do}', 'Main', 'doSomething'),
+        new WFERoute('do', '/something/{parameter}', 'Main', 'doSomething'),
     ),
     
     /**

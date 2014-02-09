@@ -22,7 +22,7 @@ class Main extends WFEController {
         
         $response = new WFEResponse();
         
-        $response->setContent( WFETemplate::render(array('message' => $arg)) );
+        $response->setContent( WFETemplate::render(array('parameter' => $arg)) );
         
         return $response;
     }
