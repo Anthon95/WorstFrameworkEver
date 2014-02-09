@@ -18,7 +18,7 @@ define('APP_PATH', $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . 
 require_once('core/WFEAutoload.php');
 
 // set exception handler
-set_exception_handler(function(WFEException $e) {
+set_exception_handler(function(Exception $e) {
     
     if(WFEConfig::get('env') == 'dev') {
         exit($e->getMessage());

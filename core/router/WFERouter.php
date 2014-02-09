@@ -22,19 +22,20 @@ class WFERouter {
         
         $route = $request->getRoute();
         
-        if( self::isInitialRequest() && ! $request->isAjax()  ) {
-            $request = new WFERequest('GET', 'WFEMain');    
-        }
-        
-        self::$currentRoute = $route;
-        
         if($route == null) {
             $route = WFERoute::get('WFE404');
             $request = new WFERequest('GET', 'WFE404');
         }
-        else {
-            $route = $request->getRoute();
+        else if( self::isInitialRequest() && ! $request->isAjax()  ) {
+            $oldRequest = $request;
+            $request = new WFERequest('GET', 'WFEMain', array(
+                array(
+                    'pageToLoad' => $route->injectParams($oldRequest->getArguments()),
+                )
+            ));    
         }
+        
+        $route = $request->getRoute();
         
         self::$controllers[] = $route->getController();
         self::$actions[] = $route->getAction();

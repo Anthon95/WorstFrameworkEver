@@ -13,6 +13,8 @@
             
         </div>
         
+        <script>alert('je dois charger : {$pageToLoad}');</script>
+        
     </body>
 
 </html>
