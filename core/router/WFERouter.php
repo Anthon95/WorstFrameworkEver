@@ -76,6 +76,17 @@ class WFERouter {
         }
     }
     
+    public static function run404() {
+        $response = WFERouter::run( new WFERequest('GET', 'WFE404') );
+        $response->send();
+    }
+    
+    public static function run500() {
+        $response = WFERouter::run( new WFERequest('GET', 'WFE500') );
+        $response->send();
+    }
+    
+    
     public static function redirect($routeName, $params = array()) {
         
         $route = WFERoute::get($routeName);

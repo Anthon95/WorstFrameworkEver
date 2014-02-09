@@ -68,8 +68,7 @@ class WFERoute {
                 throw new WFERouteException('Parameter : ' . $paramName . ' does not exists in route : ' . $this->name);
             }   
             else {
-                $url = str_replace('{' . $paramName . '}', $param, $url);
-                $url = str_replace('{' . $paramName . ':path}', $param, $url);
+                $url = str_replace(array(':path', '{' . $paramName . '}'), array('', $param), $url);
             }
         }
         

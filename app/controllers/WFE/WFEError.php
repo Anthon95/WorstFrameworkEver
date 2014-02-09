@@ -4,6 +4,7 @@ namespace app\controllers\WFE;
 
 use core\WFEController;
 use core\WFEResponse;
+use core\WFETemplate;
 
 /*
  * WFE controller for errors
@@ -18,14 +19,22 @@ class WFEError extends WFEController {
     public function WFE404() {
 
         header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
-        return new WFEResponse();
+        $response = new WFEResponse();
+        
+        $response->setContent( WFETemplate::render() );
+        
+        return $response;
     }
     
     public function WFEErrorServer() {
         
         header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
 
-        return new WFEResponse();
+        $response = new WFEResponse();
+        
+        $response->setContent( WFETemplate::render() );
+        
+        return $response;
     }
     
 }

@@ -2,6 +2,8 @@
 
 namespace app\controllers\WFE;
 
+use core\exception\WFEFileNotFoundException;
+use core\router\WFERouter;
 use core\WFEController;
 use core\WFELoader;
 use core\WFEResponse;
@@ -15,8 +17,13 @@ class WFEPublic extends WFEController {
     public function css($css) {
         
         $response = new WFEResponse();
+        
+        try {
+            $response->setContent(WFELoader::content('public/css/' . $css));
+        } catch (WFEFileNotFoundException $e) {
+            WFERouter::run404();
+        }
                 
-        $response->setContent(WFELoader::content('public/css/' . $css));
         $response->setFormat('text/css');
         
         return $response;
@@ -24,7 +31,12 @@ class WFEPublic extends WFEController {
     
     public function js($js) {
         $response = new WFEResponse();
-        $response->setContent(WFELoader::content('public/js/' . $js));
+        try {
+            $response->setContent(WFELoader::content('public/js/' . $js));
+        } catch (WFEFileNotFoundException $e) {
+            WFERouter::run404();
+        }
+        
         $response->setFormat('text/javascript');
         
         return $response;
@@ -34,7 +46,12 @@ class WFEPublic extends WFEController {
         
         
         $response = new WFEResponse();
-        $response->setContent(WFELoader::content('public/img/' . $img));
+        
+        try {
+            $response->setContent(WFELoader::content('public/img/' . $img));
+        } catch (WFEFileNotFoundException $e) {
+            WFERouter::run404();
+        }
         
         $response->setFormat('image/' . pathinfo($img, PATHINFO_EXTENSION));
         
