@@ -20,6 +20,8 @@ WFEConfig::add(array(
         new WFERoute('WFE404', null, 'WFE/WFEError', 'WFE404'),
         new WFERoute('WFE500', null, 'WFE/WFEError', 'WFEErrorServer'),
         
+        new WFERoute('WFEMain', null, 'WFE/WFE', 'main'),
+        
         new WFERoute('WFEPublicCss', '/public/css/:css', 'WFE/WFEPublic', 'css'),
         new WFERoute('WFEPublicJs', '/public/js/:js', 'WFE/WFEPublic', 'js'),
         new WFERoute('WFEPublicImg', '/public/img/:img', 'WFE/WFEPublic', 'img'),

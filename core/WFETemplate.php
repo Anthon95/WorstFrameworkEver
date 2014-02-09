@@ -79,8 +79,11 @@ class WFETemplate {
     }
 
     private static function defaultTemplate() {
-
-        return WFERouter::getCurrentController() . '/' . WFERouter::getCurrentAction() . '.tpl';
+        
+        $controller_segs = explode('/', WFERouter::getCurrentController());
+        $dir = $controller_segs[sizeof($controller_segs)-1];
+       
+        return $dir . '/' . WFERouter::getCurrentAction() . '.tpl';
     }
 
     private static function registerPluginsSmarty() {

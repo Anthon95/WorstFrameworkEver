@@ -21,11 +21,19 @@ class WFERouter {
     public static function run(WFERequest $request) {
         
         $route = $request->getRoute();
+        
+        if( self::isInitialRequest() && ! $request->isAjax()  ) {
+            $request = new WFERequest('GET', 'WFEMain');    
+        }
+        
         self::$currentRoute = $route;
         
         if($route == null) {
             $route = WFERoute::get('WFE404');
             $request = new WFERequest('GET', 'WFE404');
+        }
+        else {
+            $route = $request->getRoute();
         }
         
         self::$controllers[] = $route->getController();
@@ -121,6 +129,9 @@ class WFERouter {
     private static function getControllerClass($controller) {
         return 'app\\controllers\\' . str_replace('/', '\\', $controller);
     }
- 
+    
+    private static function isInitialRequest() {
+        return empty(self::$controllers);
+    }
 
 }
