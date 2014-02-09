@@ -9,10 +9,6 @@ WFEConfig::add(array(
     * ROUTES
     */
     
-    'defaultRouteName' => 'home',
-    '404ErrorRouteName' => 'WFE404',
-    'ServerErrorRouteName' => 'WFEErrorServer',
-    
     'routes' => array(
         
         // system routes /////////////////////////////////////////////////////////////////////////////////
