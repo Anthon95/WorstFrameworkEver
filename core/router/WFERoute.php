@@ -92,7 +92,7 @@ class WFERoute {
             array_pop($path_segs);
         }
         
-        $formated = false;
+        $sizePath = sizeof($path_segs);
         
         for ($i = 0; $i < $sizePattern; $i++) {
             
@@ -101,11 +101,10 @@ class WFERoute {
                return false;
             }
             
-            if(!$formated && strpos($pattern_segs[$i], ':path') !== false) {
-                
-                $formated = true;
+            if(strpos($pattern_segs[$i], ':path') !== false) {
                 
                 $param = '';
+                
                 for($i2 = $i ; $i2 < $sizePath ; $i2++) {
                     $param .= '/' . $path_segs[$i2];
                     unset($path_segs[$i2]);

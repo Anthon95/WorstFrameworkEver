@@ -38,7 +38,7 @@ class WFELoader {
     
     public static function fileExists($filename) {
         
-        return file_exists(ROOT . '/' . $filename);
+        return is_file(ROOT . '/' . $filename);
     }
 
 }

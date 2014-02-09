@@ -112,6 +112,7 @@ class WFERequest {
                             $param .= '/' . $path_segs[$i2];
                             unset($path_segs[$i2]);
                         }
+                        $param = substr( $param, 1 );
                     }
                     $args[str_replace(array('{', '}', ':path'), array('', '', ''), $pattern_segs[$i])] = $param;
                 }
