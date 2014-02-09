@@ -2,16 +2,25 @@
 
 namespace core;
 
-use ArrayObject;
 use core\exception\WFEConfigErrorException;
 
+
+/**
+ * Config class
+ */
 class WFEConfig {
 
     /**
-     * @var ArrayObject
+     * @var Array Array containing settings
      */
     private static $config = array();
-
+    
+    /**
+     * Allows to get a config settings
+     * @param String $setting Setting to get
+     * @return mixed Setting
+     * @throws WFEConfigErrorException
+     */
     static public function get($setting) {
 
         $settingSegs = explode("::", $setting);
@@ -29,7 +38,11 @@ class WFEConfig {
 
         return $config;
     }
-
+    
+    /**
+     * Allows to add settings to the configuration
+     * @param Array $param Associative array of settings
+     */
     static function add($param = array()) {
 
         self::$config = array_merge(self::$config, $param);

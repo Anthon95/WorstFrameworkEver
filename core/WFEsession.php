@@ -1,9 +1,15 @@
 <?php
 
-namespace core\router;
+namespace core;
 
+/**
+ * Session class
+ */
 class WFEsession {
 
+    /**
+     * Initialize Session
+     */
     public static function init() {
 
         session_start();
@@ -15,18 +21,78 @@ class WFEsession {
             $_SESSION['flashdata'] = array();
         }
     }
-
-    public static function end_session() {
+    
+    /**
+     * End session
+     */
+    public static function end() {
 
         foreach ($_SESSION['flashdata'] as $name => $data) {
             unset($_SESSION['flashdata'][$name]);
         }
 
-
-        set_flashdata(array('last_page_uri' => get_current_uri()));
+        WFEsession::setFlashdata(array('last_page_uri' => router\WFERouter::getCurrentRequest()->getURI()));
     }
 
-    public static function get_flashdata($data) {
+    /**
+     * Get data from userdata
+     * @param mixed $data array or string of data to get
+     * @return mixed Returns data
+     */
+    public static function getUserdata($data) {
+
+        $return = array();
+
+        if (is_string($data)) {
+            $return = $_SESSION['userdata'][$data];
+        } else {
+            foreach ($data as $name) {
+                $return[$name] = $_SESSION['userdata'][$name];
+            }
+        }
+
+        return $return;
+    }
+    
+    /**
+     * 
+     * @param type $data_name
+     * @return type
+     */
+    public static function issetUserdata($data_name) {
+
+        return isset($_SESSION['userdata'][$data_name]);
+    }
+
+    public static function setUserdata($data) {
+
+        foreach ($data as $name => $value) {
+            $_SESSION['userdata'][$name] = $value;
+        }
+    }
+
+    public static function killUserdata($data_names = null) {
+
+        if ($data_names == null) {
+            foreach ($_SESSION['userdata'] as $key => $value) {
+                
+            }
+            unset($_SESSION['userdata'][$key]);
+        } else {
+            foreach ($data_names as $name) {
+                unset($_SESSION['userdata'][$name]);
+            }
+        }
+    }
+
+    public static function setFlashdata($data) {
+
+        foreach ($data as $name => $value) {
+            $_SESSION['flashdata'][$name] = $value;
+        }
+    }
+    
+    public static function getFlashdata($data) {
 
         $return = array();
 
@@ -41,88 +107,40 @@ class WFEsession {
         return $return;
     }
 
-   
-    
+    public static function issetFlashdata($data_name) {
 
-    public static function get_userdata($data) {
+        return isset($_SESSION['flashdata'][$data_name]);
+    }
+
+    public static function getSessiondata($data) {
 
         $return = array();
 
         if (is_string($data)) {
-            $return = $_SESSION['userdata'][$data];
+            $return = $_SESSION['session'][$data];
         } else {
             foreach ($data as $name) {
-                $return[$name] = $_SESSION['userdata'][$name];
+                $return[$name] = $_SESSION['session'][$name];
             }
         }
 
         return $return;
     }
+    
+    public static function setSessionData($data) {
 
-    public static function isset_flashdata($data_name) {
-
-        return isset($_SESSION['flashdata'][$data_name]);
+        foreach ($data as $name => $value) {
+            $_SESSION['session'][$name] = $value;
+        }
     }
+    
+    public static function issetSessionData($data_name, $auto_destroy = false) {
 
-
-    public static function isset_session_data($data_name, $auto_destroy = false) {
-
-        $isset = isset($_SESSION[$data_name]);
+        $isset = isset($_SESSION['session'][$data_name]);
         if ($isset && $auto_destroy) {
-            unset($_SESSION[$data_name]);
+            unset($_SESSION['session'][$data_name]);
         }
         return $isset;
     }
 
-
-    public static function isset_userdata($data_name) {
-
-        return isset($_SESSION['userdata'][$data_name]);
-    }
-
-
-
-    public static function kill_userdata($data_names = null) {
-
-        if ($data_names == null) {
-            foreach ($_SESSION['userdata'] as $key => $value) {
-                
-            }
-            unset($_SESSION['userdata'][$key]);
-        }
-
-        else {
-            foreach ($data_names as $name) {
-                unset($_SESSION['userdata'][$name]);
-            }
-        }
-    }
-
-
-    public static function set_flashdata($data) {
-
-        foreach ($data as $name => $value) {
-            $_SESSION['flashdata'][$name] = $value;
-        }
-    }
-
-
-
-    public static function set_session_data($data) {
-
-        foreach ($data as $name => $value) {
-            $_SESSION[$name] = $value;
-        }
-    }
-
-
-
-    function set_userdata($data) {
-
-        foreach ($data as $name => $value) {
-            $_SESSION['userdata'][$name] = $value;
-        }
-    }
-
 }
-

@@ -14,11 +14,34 @@ use core\WFERequest;
 use core\WFEResponse;
 
 class WFERouter {
-
+    
+    /**
+     * Stack of controllers called inside the running application
+     * @var Array
+     */
     private static $controllers = array();
+    /**
+     * Stack of actions called inside the running application
+     * @var Array
+     */
     private static $actions = array();
+    /**
+     * Current WFERoute currently routed by the WFERouter
+     * @var WFERoute
+     */
     private static $currentRoute = null;
-
+    /**
+     * Current WFERequest currently routed by the WFERouter
+     * @var WFERequest
+     */
+    private static $currentRequest = null;
+    
+    /**
+     * Routes a WFERequest
+     * @param \core\WFERequest $request
+     * @return \core\WFEResponse
+     * @throws WFEDefinitionException If a controller or an action is not defined
+     */
     public static function run(WFERequest $request) {
         
         $route = $request->getRoute();
@@ -31,12 +54,14 @@ class WFERouter {
             $oldRequest = $request;
             $request = new WFERequest('GET', 'WFEMain', array(
                 array(
-                    'pageToLoad' => $route->injectParams($oldRequest->getArguments()),
+                    'routeToLoad' => $route->injectParams($oldRequest->getArguments()),
                 )
             ));    
         }
         
         $route = $request->getRoute();
+        
+        self::$currentRequest = $request;
         
         self::$controllers[] = $route->getController();
         self::$actions[] = $route->getAction();
@@ -76,17 +101,28 @@ class WFERouter {
         }
     }
     
+    /**
+     * Alias to re-routes to a 404 error page
+     */
     public static function run404() {
         $response = WFERouter::run( new WFERequest('GET', 'WFE404') );
         $response->send();
     }
     
+    /**
+     * Alias to re-routes to a 500 error page
+     */
     public static function run500() {
         $response = WFERouter::run( new WFERequest('GET', 'WFE500') );
         $response->send();
     }
     
-    
+    /**
+     * Redirect to a different route
+     * @param String $routeName Name of the route
+     * @param Array $params $params for the route path
+     * @return \core\WFEResponse
+     */
     public static function redirect($routeName, $params = array()) {
         
         $route = WFERoute::get($routeName);
@@ -95,6 +131,10 @@ class WFERouter {
         return new WFEResponse();
     }
     
+    /**
+     * Return the current controller class name
+     * @return String
+     */
     public static function getCurrentController() {
         if(!empty(self::$controllers)) {
             return end(self::$controllers); 
@@ -104,6 +144,10 @@ class WFERouter {
         }
     }
     
+    /**
+     * Return the current action name
+     * @return String
+     */
     public static function getCurrentAction() {
         if(!empty(self::$actions)) {
             return end(self::$actions); 
@@ -113,8 +157,20 @@ class WFERouter {
         }
     }
     
+    /**
+     * Return the current WFERoute
+     * @return WFERoute
+     */
     public static function getCurrentRoute() {
         return self::$currentRoute;
+    }
+    
+    /**
+     * Return the curent WFERequest
+     * @return WFERequest
+     */
+    public static function getCurrentRequest() {
+        return self::$currentRequest;
     }
     
     
@@ -139,10 +195,19 @@ class WFERouter {
         return method_exists($controller, $action); 
     }
     
+    /**
+     * Return the full classname of a controller
+     * @param String $controller
+     * @return String
+     */
     private static function getControllerClass($controller) {
         return 'app\\controllers\\' . str_replace('/', '\\', $controller);
     }
     
+    /**
+     * Return true if this is the initial request and not a sub request
+     * @return boolean
+     */
     private static function isInitialRequest() {
         return empty(self::$controllers);
     }

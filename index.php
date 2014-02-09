@@ -1,12 +1,12 @@
 <?php
 
 use core\exception\WFEDefinitionException;
-use core\exception\WFEException;
 use core\router\WFERouter;
 use core\WFEAutoload;
 use core\WFEConfig;
 use core\WFELoader;
 use core\WFERequest;
+use core\WFEsession;
 
 // Constante system
 define('SERVER_ROOT', str_replace('//', '/', $_SERVER['DOCUMENT_ROOT'] . '/'));
@@ -48,6 +48,9 @@ elseif(WFEConfig::get('env') == 'prod') {
 else {
     throw new WFEDefinitionException('Config settings env is not set properly (must be dev or prod)');
 }
+
+// init session
+WFEsession::init();
 
 // init request data
 $request = new WFERequest();

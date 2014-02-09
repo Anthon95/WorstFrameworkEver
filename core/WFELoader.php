@@ -9,7 +9,12 @@ use core\exception\WFEFileNotFoundException;
  */
 
 class WFELoader {
-
+    
+    /**
+     * Load a PHP script
+     * @param String $filename File to load
+     * @throws WFEFileNotFoundException
+     */
     public static function load($filename) {
         
         $filepath = ROOT . '/' . $filename;
@@ -23,6 +28,12 @@ class WFELoader {
         
     }
     
+    /**
+     * Load and return a file's content
+     * @param String $filename The file
+     * @return String
+     * @throws WFEFileNotFoundException
+     */
     public static function content($filename) {
         
         $filepath = ROOT . '/' . $filename;
@@ -36,6 +47,11 @@ class WFELoader {
         
     }
     
+    /**
+     * Checks if a path exists and is a file
+     * @param String $filename The path
+     * @return Boolean
+     */
     public static function fileExists($filename) {
         
         return is_file(ROOT . '/' . $filename);
