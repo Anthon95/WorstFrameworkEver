@@ -7,6 +7,7 @@
 namespace core\router;
 
 use core\exception\WFEDefinitionException;
+use core\WFEConfig;
 use core\WFEController;
 use core\WFELoader;
 use core\WFERequest;
@@ -26,7 +27,7 @@ class WFERouter {
             $route = WFERoute::get('WFE404');
             $request = new WFERequest('GET', 'WFE404');
         }
-        else if( self::isInitialRequest() && ! $request->isAjax()  ) {
+        else if( self::isInitialRequest() && ! $request->isAjax() && $route->getController() != WFEConfig::get('publicController')  ) {
             $oldRequest = $request;
             $request = new WFERequest('GET', 'WFEMain', array(
                 array(

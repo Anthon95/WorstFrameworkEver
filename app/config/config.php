@@ -22,17 +22,17 @@ WFEConfig::add(array(
         
         new WFERoute('WFEMain', null, 'WFE/WFE', 'main'),
         
-        new WFERoute('WFEPublicCss', '/public/css/:css', 'WFE/WFEPublic', 'css'),
-        new WFERoute('WFEPublicJs', '/public/js/:js', 'WFE/WFEPublic', 'js'),
-        new WFERoute('WFEPublicImg', '/public/img/:img', 'WFE/WFEPublic', 'img'),
+        new WFERoute('WFEPublicCss', '/public/css/{css:path}', 'WFE/WFEPublic', 'css'),
+        new WFERoute('WFEPublicJs', '/public/js/{js:path}', 'WFE/WFEPublic', 'js'),
+        new WFERoute('WFEPublicImg', '/public/img/{img:path}', 'WFE/WFEPublic', 'img'),
         
         // application routes ///////////////////////////////////////////////////////////////////////////
         
         new WFERoute('home', '/', 'Main', 'home'),
-        new WFERoute('home_2', '/:id/home/:id2', 'Main', 'home'),
-        new WFERoute('user_get', '/user/:id', 'User', 'get'),
+        new WFERoute('home_2', '/{id}/home/{id2}', 'Main', 'home'),
+        new WFERoute('user_get', '/user/{id}', 'User', 'get'),
         
-        new WFERoute('do', '/something/:do', 'Main', 'doSomething'),
+        new WFERoute('do', '/something/{do}', 'Main', 'doSomething'),
     ),
     
     /**
@@ -52,5 +52,12 @@ WFEConfig::add(array(
      */
     
     'env' => 'dev', // whether dev or prod
+    
+    /**
+     * CONTROLLERS
+     */
+    
+    'publicController' => 'WFE/WFEPublic',
+    'errorController' => 'WFE/WFEError',
     
 ));

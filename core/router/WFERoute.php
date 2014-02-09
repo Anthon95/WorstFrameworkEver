@@ -60,39 +60,67 @@ class WFERoute {
     }
     
     public function injectParams($params) {
+       
         
         $url = $this->getPath();
         foreach ($params as $paramName => $param) {
-            if (strpos($url, ':' . $paramName) === false) {
+            if (!$this->hasParam($paramName)) {
                 throw new WFERouteException('Parameter : ' . $paramName . ' does not exists in route : ' . $this->name);
             }   
             else {
-                $url = str_replace(':' . $paramName, $param, $url);
+                $url = str_replace('{' . $paramName . '}', $param, $url);
+                $url = str_replace('{' . $paramName . ':path}', $param, $url);
             }
         }
         
         return APP_PATH . $url;
     }
+    
+    private function hasParam($paramName) {
+        $url = $this->getPath();
+        return strpos($url, '{' . $paramName . '}') !== false || strpos($url, '{' . $paramName . ':path}') !== false;
+    } 
 
     private static function pathMatch($path, $pattern) {
+        
         $pattern_segs = explode('/', $pattern);
         $path_segs = explode('/', $path);
-
-        if (sizeof($path_segs) > 2 && $path_segs[sizeof($path_segs) - 1] == '') {
+        
+        $sizePattern = sizeof($pattern_segs);
+        $sizePath = sizeof($path_segs);
+        
+        if ($sizePath > 2 && $path_segs[$sizePath - 1] == '') {
             array_pop($path_segs);
         }
-
-        $size = sizeof($path_segs);
-
-        if ($size != sizeof($pattern_segs)) {
-            return false;
-        }
-
-        for ($i = 0; $i < $size; $i++) {
+        
+        $formated = false;
+        
+        for ($i = 0; $i < $sizePattern; $i++) {
             
-            if ((substr($pattern_segs[$i], 0, 1) != ':' && $pattern_segs[$i] != $path_segs[$i])) {
+            if ((substr($pattern_segs[$i], 0, 1) != '{' && $pattern_segs[$i] != $path_segs[$i])) {
                 
-                return false;
+               return false;
+            }
+            
+            if(!$formated && strpos($pattern_segs[$i], ':path') !== false) {
+                
+                $formated = true;
+                
+                $param = '';
+                for($i2 = $i ; $i2 < $sizePath ; $i2++) {
+                    $param .= '/' . $path_segs[$i2];
+                    unset($path_segs[$i2]);
+                }
+                $path_segs[] = $param;
+                $sizePath = sizeof($path_segs);
+                
+                return true;
+            }
+            
+            
+            
+            if ($sizePath != $sizePattern) {
+                continue;
             }
         }
 

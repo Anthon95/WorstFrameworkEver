@@ -100,10 +100,20 @@ class WFERequest {
         
         for($i = 0 ; $i < sizeof($pattern_segs) ; $i++) {
             
-            if(substr($pattern_segs[$i], 0, 1) == ':') {
+            if(substr($pattern_segs[$i], 0, 1) == '{') {
                 
                 if(isset($path_segs[$i])) {
-                    $args[str_replace(':', '', $pattern_segs[$i])] = $path_segs[$i];
+                    
+                    if(strpos($pattern_segs[$i], ':path') !== false) {
+                
+                        $param = '';
+                        $size = sizeof($path_segs);
+                        for($i2 = $i ; $i2 <  $size; $i2++) {
+                            $param .= '/' . $path_segs[$i2];
+                            unset($path_segs[$i2]);
+                        }
+                    }
+                    $args[str_replace(array('{', '}', ':path'), array('', '', ''), $pattern_segs[$i])] = $param;
                 }
             }
         }

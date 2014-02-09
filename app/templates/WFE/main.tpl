@@ -8,13 +8,16 @@
     </head>
 
     <body>
-        
+
         <div id="page-content">
             
         </div>
-        
-        <script>alert('je dois charger : {$pageToLoad}');</script>
-        
-    </body>
+
+    <script type="text/javascript" src="{link route="WFEPublicJs" params=[js => "core/libs/jQuery/jquery.min.js"]}"></script>
+
+    <script>alert('je dois charger : {$pageToLoad}');</script>
+
+
+</body>
 
 </html>
