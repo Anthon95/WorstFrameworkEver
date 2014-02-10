@@ -24,7 +24,8 @@ set_exception_handler(function(Exception $e) {
         exit($e->getMessage());
     }
     elseif(WFEConfig::get('env') == 'prod') {
-        WFERouter::run(new WFERequest('GET', 'WFEErrorServer'));
+        $response = WFERouter::run( new WFERequest('GET', 'WFE500') );
+        $response->send();
     }
 });
 

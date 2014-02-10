@@ -44,9 +44,9 @@ class WFETemplate {
             ));
 
             self::$smarty->setCompileDir(ROOT . '/app/cache/smarty/template_c/');
+            
+            self::registerPluginsSmarty();
         }
-
-        self::registerPluginsSmarty();
     }
     
     /**
@@ -62,6 +62,7 @@ class WFETemplate {
     public static function render($arg1 = null, $arg2 = array()) {
 
         self::init();
+                
 
         if (is_array($arg1)) {
             $tpl = self::defaultTemplate();
@@ -77,7 +78,7 @@ class WFETemplate {
         if (!WFELoader::fileExists('app/templates/' . $tpl)) {
             throw new WFETemplateException($tpl);
         }
-
+        
         $output = self::$smarty->fetch($tpl);
 
         return $output;
@@ -90,8 +91,13 @@ class WFETemplate {
     private static function setParams($params = array()) {
 
         foreach ($params as $key => $value) {
-
-            self::$smarty->assign($key, $value);
+            
+            if(is_object($value)) {
+                self::$smarty->registerObject($key, $value);
+            }
+            else {
+                self::$smarty->assign($key, $value);
+            }
         }
     }
     
@@ -111,8 +117,11 @@ class WFETemplate {
      * Register all smarty plugins for WFE
      */
     private static function registerPluginsSmarty() {
+        
+        $smartyPluginsClass = "core\libs\smartyPlugins\WFESmartyPlugins";
 
-        self::$smarty->registerPlugin("function", "link", array("core\libs\smartyPlugins\WFESmartyPlugins", "link"));
+        self::$smarty->registerPlugin("function", "link", array($smartyPluginsClass, "link"));
+        
     }
 
 }

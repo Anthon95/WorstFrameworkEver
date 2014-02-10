@@ -56,6 +56,7 @@ class WFERouter {
                 array(
                     'routeToLoad' => $route->injectParams($oldRequest->getArguments()),
                     'WFERoutes' => WFERoute::getInstances(),
+                    'appRoute' => APP_PATH,
                 )
             ));    
         }

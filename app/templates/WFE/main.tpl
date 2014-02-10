@@ -10,21 +10,21 @@
     <body>
 
         <div id="page-content">
-            
+
         </div>
 
     <script type="text/javascript" src="{link route="WFEPublicJs" params=[js => "core/libs/jQuery/jquery.min.js"]}"></script>
     <script type="text/javascript" src="{link route="WFEPublicJs" params=[js => "core/libs/jQuery/plugins/jquery.form.min.js"]}"></script>
     <script type="text/javascript" src="{link route="WFEPublicJs" params=[js => "core/core.js"]}"></script>
 
-    <script>
+    <script type="text/javascript" id="initScript">
         
-        var pageToLoad = "{$routeToLoad}";
-        WFE = {
-            router: new Router()
-        };
+        {include file="WFE/js/config.tpl.js"}
         
-        {include file="WFE/js/registerRoutes.js.tpl"}
+        WFEConfig.appRoute = "{$appRoute}";
+        
+        wfe = new WFE("{$routeToLoad}", WFEConfig);
+        
         
     </script>
 
