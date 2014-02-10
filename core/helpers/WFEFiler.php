@@ -2,7 +2,7 @@
 
 namespace app\core\helpers;
 
-class Filer {
+class WFEFiler {
 
     protected static $root = APP;
     public static $current = APP;

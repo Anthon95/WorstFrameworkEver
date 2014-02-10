@@ -2,7 +2,7 @@
 
 namespace app\core\helpers;
 
-class Email {
+class WFEMailer {
 
     private $from = 'youremail@email.fr';
     private $from_name = 'Your Name';
