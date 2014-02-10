@@ -1,5 +1,7 @@
 <?php
 
+namespace app\core\helpers;
+
 class Filer {
 
     protected static $root = APP;
