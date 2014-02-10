@@ -1,4 +1,5 @@
 WFEConfig = {
+    wfeLinkClass: 'wfe-link',
     transitionIn: function(content) {
     
     },

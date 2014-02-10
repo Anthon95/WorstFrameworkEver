@@ -35,6 +35,11 @@ class WFERouter {
      * @var WFERequest
      */
     private static $currentRequest = null;
+    /**
+     * Indicates if the request if the initial request
+     * @var boolean
+     */
+    private static $initial = true;
     
     /**
      * Routes a WFERequest
@@ -51,14 +56,21 @@ class WFERouter {
             $request = new WFERequest('GET', 'WFE404');
         }
         else if( self::isInitialRequest() && ! $request->isAjax() && $route->getController() != WFEConfig::get('publicController')  ) {
+            
+            self::$initial = false;
+            
             $oldRequest = $request;
+            $content = WFERouter::run($oldRequest)->getContent();
+            
+            self::$initial = true;
+            
             $request = new WFERequest('GET', 'WFEMain', array(
                 array(
-                    'routeToLoad' => $route->injectParams($oldRequest->getArguments()),
+                    'content' => $content,
                     'WFERoutes' => WFERoute::getInstances(),
                     'appRoute' => APP_PATH,
                 )
-            ));    
+            ));
         }
         
         $route = $request->getRoute();
@@ -92,7 +104,7 @@ class WFERouter {
             throw new WFEDefinitionException('Action : ' . $myaction . ' in controller : ' . $mycontroller . ' must return a core\WFEResponse object');
         }
         
-        if(sizeof(self::$controllers) == 1) {
+        if(sizeof(self::$controllers) == 1 && self::$initial) {
             $response->send();
         }
         else {
@@ -211,6 +223,9 @@ class WFERouter {
      * @return boolean
      */
     private static function isInitialRequest() {
+        if(!self::$initial) {
+            return false;
+        }
         return empty(self::$controllers);
     }
 

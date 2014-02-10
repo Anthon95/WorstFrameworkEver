@@ -157,7 +157,13 @@ class WFERequest {
         if( ! isset($_POST['routeName'])) {
             throw new WFESystemErrorException('POST value "routeName" does not exists');
         }
-        $this->routeName = $_POST['routeName'];
+        $this->route = WFERoute::get( $_GET['routeName'] );
+        
+        if(isset($_POST['routeParams'])) {
+            if(is_array($_POST['routeParams'])) {
+                $this->params = $_POST['routeParams'];
+            }
+        }
     }
     
     /**
@@ -173,6 +179,12 @@ class WFERequest {
             $route = WFERoute::get( $_GET['routeName'] );
         }
         $this->route = $route;
+        
+        if(isset($_GET['routeParams'])) {
+            if(is_array($_GET['routeParams'])) {
+                $this->params = $_GET['routeParams'];
+            }
+        }
     }
     
     

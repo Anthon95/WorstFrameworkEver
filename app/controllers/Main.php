@@ -12,9 +12,11 @@ class Main extends WFEController {
     
     public function home() {
         
-        $response = WFERouter::run(new WFERequest('GET', 'do', array('do' => 'BLA')));
+        $response = WFERouter::run(new WFERequest('GET', 'do', array('parameter' => 'BLA')));
+        $response = new WFEResponse();
+        $response->setContent(WFETemplate::render());
         
-        return new WFEResponse();
+        return $response;
     }
     
     public function doSomething($arg) {

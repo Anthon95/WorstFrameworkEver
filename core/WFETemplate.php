@@ -121,6 +121,7 @@ class WFETemplate {
         $smartyPluginsClass = "core\libs\smartyPlugins\WFESmartyPlugins";
 
         self::$smarty->registerPlugin("function", "link", array($smartyPluginsClass, "link"));
+        self::$smarty->registerPlugin("function", "currentRoutePath", array($smartyPluginsClass, "getCurrentRoutePath"));
         
     }
 

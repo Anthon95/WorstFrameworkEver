@@ -10,7 +10,7 @@
     <body>
 
         <div id="page-content">
-
+            {$content}
         </div>
 
     <script type="text/javascript" src="{link route="WFEPublicJs" params=[js => "core/libs/jQuery/jquery.min.js"]}"></script>
@@ -21,9 +21,10 @@
         
         {include file="WFE/js/config.tpl.js"}
         
-        WFEConfig.appRoute = "{$appRoute}";
+        WFEConfig.appRoot = "{$appRoute}";
         
-        wfe = new WFE("{$routeToLoad}", WFEConfig);
+        wfe = new WFE_API("{$routeToLoad}", WFEConfig);
+        
         
         
     </script>
