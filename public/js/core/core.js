@@ -6,12 +6,12 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function WFE_API(toLoad, _config) {
+function WFE_API(_config) {
 
 
     var config = _config;
     var uriHandler;
-    var data = {
+    var WFEData = {
         routes: {}
     };
 
@@ -24,31 +24,41 @@ function WFE_API(toLoad, _config) {
         ////////////////////////////////////////////////////////////////////////////////// WFE : loadRoute
 
         WFE_API.prototype.loadRoute = function(routeName, params, method) {
-            
+
             if (typeof method === 'undefined') {
                 method = 'GET';
             }
             if (typeof params === 'undefined') {
                 params = {};
             }
-            
+
+            e = new WFEEvent(WFEEvent.events.START_LOADING).trigger();
+
             jQuery.ajax({
-                type:method,
+                type: method,
                 url: config.appRoot + '/',
-                data: {'routeParams': params, routeName:routeName}
-            }).done(function(data) {
-                
-                jQuery('#page-content').html(data);
-                //uriHandler.change( getUriFromUrl(jQuery('#page-data #route-data').attr('path')) );
+                data: {'routeParams': params, routeName: routeName},
+                success: function(data, textStatus, jqXHR) {
+
+                    WFEData.routes[routeName] = {
+                        content: data,
+                        type: jqXHR.getResponseHeader('content-type')
+                    };
+
+                    e2 = new WFEEvent(WFEEvent.events.FINISH_LOADING);
+                    e2.bindData('status', 'success');
+                    e2.bindData('routeName', routeName);
+                    e2.trigger();
+                }
             });
-            
+
         };
 
         ////////////////////////////////////////////////////////////////////////////////// WFE : loadURL
 
         WFE_API.prototype.loadURL = function(url, params) {
 
-            if(typeof params === 'undefined') {
+            if (typeof params === 'undefined') {
                 params = {};
             }
 
@@ -66,14 +76,51 @@ function WFE_API(toLoad, _config) {
 
         WFE_API.prototype.navigate = function(routeName, params) {
             
+            this.addEventListener(WFEEvent.events.FINISH_LOADING, doneLoading);
+            this.loadRoute(routeName, params);
             
+            
+        };
+
+        ////////////////////////////////////////////////////////////////////////////////// WFE : getData
+
+        WFE_API.prototype.getData = function(dataRouteName) {
+
+            if (typeof WFEData.routes[dataRouteName] !== 'undefined') {
+                return WFEData.routes[dataRouteName];
+            }
+            else {
+                return null;
+            }
+        };
+        
+         ////////////////////////////////////////////////////////////////////////////////// WFE : addEventListener
+
+        WFE_API.prototype.addEventListener = function(eventType, handler) {
+
+            window.addEventListener(eventType, handler);
+        };
+        
+        ////////////////////////////////////////////////////////////////////////////////// WFE : removeEventListener
+
+        WFE_API.prototype.removeEventListener = function(eventType, handler) {
+
+            window.removeEventListener(eventType, handler);
         };
     }
 
     ///////////////////////////////////////////////////////////////////////////////// PRIVATE
-
+    
     function getUriFromUrl(url) {
         return url.replace(config.appRoot, '');
+    }
+
+    function doneLoading(event) {
+        this.removeEventListener(WFEEvent.events.FINISH_LOADING, doneLoading);
+        
+        jQuery('#page-content').html(this.getData(event.data.routeName).content);
+        uriHandler.change(getUriFromUrl(jQuery('#page-data #route-data').attr('path')));
+
     }
 
     ///////////////////////////////////////////////////////////////////////////////// CONSTRUCTOR
@@ -85,9 +132,9 @@ function WFE_API(toLoad, _config) {
         uriHandler = new HashHandler(config.appRoot, config.wfeLinkClass);
     }
 
-    uriHandler.start();
+    document.title = jQuery('#page-data #meta-data').attr('title');
 
-    //this.loadURL(toLoad);
+    uriHandler.start();
 
     return this;
 }
@@ -108,10 +155,8 @@ function WFEEvent(name) {
         jQuery.error(name + ' is not a valid WFEEvent name');
     }
 
-    var name = name;
-
-    var event = document.createEvent("Event");
-    event.initEvent(name, true, true);
+    this.name = name;
+    this.data = {};
 
     if (typeof WFEEvent.initialized === "undefined") {
 
@@ -128,15 +173,17 @@ function WFEEvent(name) {
                 $.error('value param is not defined when binding data to ' + name + ' event');
             }
 
-            event[key] = value;
+            this.data[key] = value;
         };
 
         ////////////////////////////////////////////////////////////////////////////////// WFEEvent : trigger
 
         WFEEvent.prototype.trigger = function() {
 
+            event = new CustomEvent(this.name, null, true);
+            event.data = this.data;
             window.dispatchEvent(event);
-        };
+        };  
     }
 
     ////////////////////////////////////////////////////////////////////////////////////// PRIVATE
@@ -156,7 +203,9 @@ function WFEEvent(name) {
 ///////////////////////////////////////////////////////////////////////////////////////// STATIC
 
 WFEEvent.events = {
-    LOADING: 'loading'
+    START_LOADING: 'wfe_start_loading',
+    LOADING: 'wfe_loading',
+    FINISH_LOADING: 'wfe_finish_loading'
 };
 
 
@@ -183,6 +232,7 @@ function PushHandler(baseURL, wfeLinkClass) {
             state = this.baseUrl + uri;
 
             window.history.pushState("", uri, state);
+            document.title = jQuery('#page-data #meta-data').attr('title');
             //changePage(uri);
         };
 
