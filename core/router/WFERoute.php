@@ -113,6 +113,14 @@ class WFERoute {
     }
     
     /**
+     * Return all instances of WFERoute
+     * @return Array
+     */
+    public static function getInstances() {
+        return self::$instances;
+    }
+    
+    /**
      * Returns the path of the route with an array of parameters
      * @param Array $params Parameters to inject
      * @return String

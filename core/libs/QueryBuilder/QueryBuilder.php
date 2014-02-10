@@ -188,8 +188,8 @@ class QueryBuilder
 	 * @return String The value secured
 	 */
 	protected function secureValue($value) {
-		// secure
-        return $value;
+        
+        return mysqli_real_escape_string($value);
 	}
 
 	/**

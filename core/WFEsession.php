@@ -2,6 +2,9 @@
 
 namespace core;
 
+use core\exception\WFESessionException;
+use core\router\WFERouter;
+
 /**
  * Session class
  */
@@ -14,6 +17,10 @@ class WFEsession {
 
         session_start();
 
+        if (!isset($_SESSION['session']) || !is_array($_SESSION['session'])) {
+            $_SESSION['session'] = array();
+        }
+
         if (!isset($_SESSION['userdata']) || !is_array($_SESSION['userdata'])) {
             $_SESSION['userdata'] = array();
         }
@@ -21,7 +28,7 @@ class WFEsession {
             $_SESSION['flashdata'] = array();
         }
     }
-    
+
     /**
      * End session
      */
@@ -31,116 +38,170 @@ class WFEsession {
             unset($_SESSION['flashdata'][$name]);
         }
 
-        WFEsession::setFlashdata(array('last_page_uri' => router\WFERouter::getCurrentRequest()->getURI()));
+        WFEsession::setFlashdata(array('last_page_uri' => WFERouter::getCurrentRequest()->getURI()));
     }
 
     /**
-     * Get data from userdata
-     * @param mixed $data array or string of data to get
-     * @return mixed Returns data
+     * Return a user session data
+     * @param mixed $data Array or string of $data name
+     * @return Array Associative array of names and values
+     * @throws WFESessionException If $data does not exists in session
      */
     public static function getUserdata($data) {
 
-        $return = array();
-
-        if (is_string($data)) {
-            $return = $_SESSION['userdata'][$data];
-        } else {
-            foreach ($data as $name) {
-                $return[$name] = $_SESSION['userdata'][$name];
-            }
-        }
-
-        return $return;
+        return self::getData('userdata', $data);
     }
-    
+
     /**
-     * 
-     * @param type $data_name
-     * @return type
+     * Return true if a user session data exists
+     * @param String $data Data name
+     * @return boolean
      */
-    public static function issetUserdata($data_name) {
+    public static function issetUserdata($data) {
 
-        return isset($_SESSION['userdata'][$data_name]);
+        return self::issetData('userdata', $data);
     }
 
+    /**
+     * Add data to the user session data
+     * @param Array $data Associative array of names, values to add to the user session data
+     */
     public static function setUserdata($data) {
 
-        foreach ($data as $name => $value) {
-            $_SESSION['userdata'][$name] = $value;
-        }
+        self::setData('userdata', $data);
     }
 
-    public static function killUserdata($data_names = null) {
+    /**
+     * Removes data from the user session data
+     * @param Array $data Associative array of user session data to remove, if null remove all data !
+     */
+    public static function killUserdata($data = null) {
 
-        if ($data_names == null) {
-            foreach ($_SESSION['userdata'] as $key => $value) {
-                
-            }
-            unset($_SESSION['userdata'][$key]);
-        } else {
-            foreach ($data_names as $name) {
-                unset($_SESSION['userdata'][$name]);
-            }
-        }
+        self::killData('userdata', $data);
     }
 
-    public static function setFlashdata($data) {
-
-        foreach ($data as $name => $value) {
-            $_SESSION['flashdata'][$name] = $value;
-        }
-    }
-    
+    /**
+     * Return a flash session data
+     * @param mixed $data Array or string of $data name
+     * @return Array Associative array of names and values
+     * @throws WFESessionException If $data does not exists in session
+     */
     public static function getFlashdata($data) {
 
-        $return = array();
-
-        if (is_string($data)) {
-            $return = $_SESSION['flashdata'][$data];
-        } else {
-            foreach ($data as $name) {
-                $return[$name] = $_SESSION['flashdata'][$name];
-            }
-        }
-
-        return $return;
+        return self::getData('flashdata', $data);
     }
 
-    public static function issetFlashdata($data_name) {
+    /**
+     * Return true if a flash session data exists
+     * @param String $data Data name
+     * @return boolean
+     */
+    public static function issetFlashdata($data) {
 
-        return isset($_SESSION['flashdata'][$data_name]);
+        return self::issetData('flashdata', $data);
     }
 
+    /**
+     * Add data to the flash session data
+     * @param Array $data Associative array of names, values to add to the user session data
+     */
+    public static function setFlashdata($data) {
+
+        self::setData('flashdata', $data);
+    }
+
+    /**
+     * Removes data from the flash session data
+     * @param Array $data Associative array of user session data to remove, if null remove all data !
+     */
+    public static function killFlashdata($data = null) {
+
+        self::killData('flashdata', $data);
+    }
+
+    /**
+     * Return a session data
+     * @param mixed $data Array or string of $data name
+     * @return Array Associative array of names and values
+     * @throws WFESessionException If $data does not exists in session
+     */
     public static function getSessiondata($data) {
 
+        return self::getData('session', $data);
+    }
+
+    /**
+     * Return true if a session data exists
+     * @param String $data Data name
+     * @return boolean
+     */
+    public static function issetSessionData($data) {
+
+        return self::issetData('session', $data);
+    }
+
+    /**
+     * Add data to the session data
+     * @param Array $data Associative array of names, values to add to the user session data
+     */
+    public static function setSessionData($data) {
+
+        self::setData('session', $data);
+    }
+
+    /**
+     * Removes data from the session data
+     * @param Array $data Associative array of user session data to remove, if null remove all data !
+     */
+    public static function killSessiondata($data = null) {
+
+        self::killData('session', $data);
+    }
+
+    private static function getData($in, $data) {
         $return = array();
 
         if (is_string($data)) {
-            $return = $_SESSION['session'][$data];
+            if (self::issetData($in, $data)) {
+                $return = $_SESSION[$in][$data];
+            } else {
+                throw new WFESessionException('Session data : ' . $data . ' cannot be found in ' . $in);
+            }
         } else {
             foreach ($data as $name) {
-                $return[$name] = $_SESSION['session'][$name];
+                if (self::issetData($in, $data)) {
+                    $return[$name] = $_SESSION[$in][$name];
+                } else {
+                    throw new WFESessionException('Session data : ' . $name . ' cannot be found in ' . $in);
+                }
             }
         }
 
         return $return;
     }
-    
-    public static function setSessionData($data) {
 
+    private static function setData($in, $data) {
         foreach ($data as $name => $value) {
-            $_SESSION['session'][$name] = $value;
+            $_SESSION[$in][$name] = $value;
         }
     }
-    
-    public static function issetSessionData($data_name, $auto_destroy = false) {
 
-        $isset = isset($_SESSION['session'][$data_name]);
-        if ($isset && $auto_destroy) {
-            unset($_SESSION['session'][$data_name]);
+    private static function issetData($in, $data) {
+        return isset($_SESSION[$in][$data]);
+    }
+
+    private static function killData($in, $data = null) {
+        if ($data == null) {
+            foreach ($_SESSION[$in] as $key => $value) {
+                if (self::issetData($in, $key)) {
+                    unset($_SESSION[$in][$key]);
+                }
+            }
+        } else {
+            foreach ($data as $name) {
+                unset($_SESSION[$in][$name]);
+            }
         }
-        return $isset;
     }
 
 }
